@@ -1,0 +1,7 @@
+lib/mimemagic.rb
+lib/mimemagic_tables.rb
+test/test_mimemagic.rb
+script/freedesktop.org.xml
+script/generate-mime.rb
+Rakefile
+README
