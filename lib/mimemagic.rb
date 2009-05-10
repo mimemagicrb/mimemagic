@@ -3,7 +3,7 @@ require 'stringio'
 
 # Mime type detection
 class MimeMagic
-  VERSION = '0.1'
+  VERSION = '0.1.1'
 
   attr_reader :type, :mediatype, :subtype
 
