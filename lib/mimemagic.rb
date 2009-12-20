@@ -3,7 +3,7 @@ require 'stringio'
 
 # Mime type detection
 class MimeMagic
-  VERSION = '0.1.1'
+  VERSION = '0.1.2'
 
   attr_reader :type, :mediatype, :subtype
 
@@ -51,6 +51,10 @@ class MimeMagic
   # Lookup mime type by magic content analysis
   # That could be slow
   def self.by_magic(content)
+    if String === content
+      content.force_encoding('ascii-8bit') if content.respond_to? :force_encoding
+      content = StringIO.new(content.to_s, 'rb')
+    end
     io = content.respond_to?(:seek) ? content : StringIO.new(content.to_s, 'rb')
     mime = MAGIC.find {|type, matches| magic_match(io, matches) }
     mime ? new(mime[0]) : nil
@@ -75,13 +79,13 @@ class MimeMagic
 
   def self.magic_match(io, matches)
     matches.any? do |offset, value, children|
-      if Range === offset
-        io.seek(offset.begin)
-        match = io.read(offset.end - offset.begin + value.length).include?(value)
-      else
-        io.seek(offset)
-        match = value == io.read(value.length)
-      end
+      match = if Range === offset
+		io.seek(offset.begin)
+                io.read(offset.end - offset.begin + value.length).include?(value)
+              else
+                io.seek(offset)
+		value == io.read(value.length)
+              end
       match && (!children || magic_match(io, children))
     end
   rescue

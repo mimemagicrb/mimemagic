@@ -1,5 +1,6 @@
 gem 'test-unit', '>= 0'
 gem 'test-spec', '>= 0'
+
 require 'test/unit'
 require 'test/spec'
 require 'mimemagic'
@@ -28,7 +29,10 @@ describe 'MimeMagic' do
   end
 
   it 'should recognize by magic' do
-    MimeMagic.by_magic(File.open('/bin/ls')).to_s.should == 'application/x-executable'
-    MimeMagic.by_magic(File.open('/lib/libc.so.6')).to_s.should == 'application/x-sharedlib'
+    Dir['test/files/*'].each do |file|
+      mime = file[11..-1].gsub('.', '/')
+      MimeMagic.by_magic(File.read(file)).to_s.should == mime
+      MimeMagic.by_magic(File.open(file, 'rb')).to_s.should == mime
+    end
   end
 end
