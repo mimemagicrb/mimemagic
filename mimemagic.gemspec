@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project = %q{mimemagic}
   s.rubygems_version = %q{1.3.1}
   s.summary = %q{Mime detection by extension or content}
+  s.homepage = 'https://github.com/minad/mimemagic'
   s.test_files = ["test/test_mimemagic.rb"]
 
   if s.respond_to? :specification_version then
