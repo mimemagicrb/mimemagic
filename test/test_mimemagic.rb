@@ -1,31 +1,34 @@
+gem 'test-unit', '>= 0'
+gem 'test-spec', '>= 0'
+require 'test/unit'
+require 'test/spec'
 require 'mimemagic'
 
-class TC_MimeMagic < Test::Unit::TestCase
-  def test_text?
-    assert MimeMagic.new('text/plain').text?
-    assert MimeMagic.new('text/html').text?
-    assert !MimeMagic.new('application/octet-stream').text?
-    assert !MimeMagic.new('image/png').text?
+describe 'MimeMagic' do
+  it 'should have text? helper' do
+    MimeMagic.new('text/plain').should.be.text
+    MimeMagic.new('text/html').should.be.text
+    MimeMagic.new('application/octet-stream').should.be.not.text
+    MimeMagic.new('image/png').should.be.not.text
+  end
+  it 'should have hierarchy' do
+    MimeMagic.new('text/html').should.be.child_of 'text/plain'
+    MimeMagic.new('text/x-java').should.be.child_of 'text/plain'
   end
 
-  def test_child_of?
-    assert MimeMagic.new('text/html').child_of?('text/plain')
-    assert MimeMagic.new('text/x-java').child_of?('text/plain')
+  it 'should have extensions' do
+    MimeMagic.new('text/html').extensions.should == %w(htm html)
   end
 
-  def test_extensions
-    assert_equal %w(htm html), MimeMagic.new('text/html').extensions
+  it 'should recognize extensions' do
+    MimeMagic.by_extension('html').to_s.should == 'text/html'
+    MimeMagic.by_extension('rb').to_s.should == 'application/x-ruby'
+    MimeMagic.by_extension('crazy').should == nil
+    MimeMagic.by_extension('').should == nil
   end
 
-  def test_by_extension
-    assert_equal 'text/html', MimeMagic.by_extension('html').to_s
-    assert_equal 'application/x-ruby', MimeMagic.by_extension('rb').to_s
-    assert_nil MimeMagic.by_extension('crazy')
-    assert_nil MimeMagic.by_extension('')
-  end
-
-  def test_by_magic
-    assert_equal 'application/x-executable', MimeMagic.by_magic(File.open('/bin/ls')).to_s
-    assert_equal 'application/x-sharedlib', MimeMagic.by_magic(File.open('/lib/libc.so.6')).to_s
+  it 'should recognize by magic' do
+    MimeMagic.by_magic(File.open('/bin/ls')).to_s.should == 'application/x-executable'
+    MimeMagic.by_magic(File.open('/lib/libc.so.6')).to_s.should == 'application/x-sharedlib'
   end
 end
