@@ -16,15 +16,22 @@ class MimeMagic
 
   # Add custom mime type. Arguments:
   # * <i>type</i>: Mime type
-  # * <i>extensions</i>: String list of file extensions
-  # * <i>parents</i>: String list of parent mime types
-  # * <i>magics</i>: Mime magic specification array
-  def self.add(type, extensions, parents, *magics)
-    TYPES[type] = [extensions, parents, magics]
+  # * <i>options</i>: Options hash
+  #
+  # Option keys:
+  # * <i>:extensions</i>: String list or single string of file extensions
+  # * <i>:parents</i>: String list or single string of parent mime types
+  # * <i>:magic</i>: Mime magic specification
+  # * <i>:comment</i>: Comment string
+  def self.add(type, options = {})
+    extensions = [options[:extensions]].flatten.compact
+    TYPES[type] = [extensions,
+                  [options[:parents]].flatten.compact,
+                  options[:comment]]
     extensions.each do |ext|
       EXTENSIONS[ext] = type
     end
-    MAGIC.unshift [type, magics] if magics
+    MAGIC.unshift [type, [options[:magic]].flatten.compact] if options[:magic]
   end
 
   # Returns true if type is a text format
@@ -52,9 +59,14 @@ class MimeMagic
     TYPES.key?(type) ? TYPES[type][0] : []
   end
 
+  # Get mime comment
+  def comment
+    (TYPES.key?(type) ? TYPES[type][2] : nil).to_s
+  end
+
   # Lookup mime type by file extension
   def self.by_extension(ext)
-    ext = ext.downcase
+    ext = ext.to_s.downcase
     mime = EXTENSIONS[ext] || (ext[0..0] == '.' && EXTENSIONS[ext[1..-1]])
     mime ? new(mime) : nil
   end

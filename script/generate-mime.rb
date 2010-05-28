@@ -61,6 +61,7 @@ extensions = {}
 types = {}
 magics = []
 (doc/'mime-info/mime-type').each do |mime|
+  comments = Hash[*(mime/'comment').map {|comment| [comment['lang'], comment.inner_text] }.flatten]
   type = mime['type']
   subclass = (mime/'sub-class-of').map{|x| x['type']}
   exts = (mime/'glob').map{|x| x['pattern'] =~ /^\*\.([^\[\]]+)$/ ? $1.downcase : nil }.compact
@@ -73,7 +74,7 @@ magics = []
     exts.each{|x|
       extensions[x] = type if !extensions.include?(x)
     }
-    types[type] = [exts,subclass]
+    types[type] = [exts,subclass,comments[nil]]
   end
 end
 
@@ -91,7 +92,8 @@ puts "  TYPES = {"
 types.keys.sort.each do |key|
   exts = types[key][0].sort.join(' ')
   parents = types[key][1].sort.join(' ')
-  puts "    '#{key}' => [%w(#{exts}), %w(#{parents})],"
+  comment = types[key][2].inspect
+  puts "    '#{key}' => [%w(#{exts}), %w(#{parents}), #{comment}],"
 end
 puts "  }"
 puts "  MAGIC = ["

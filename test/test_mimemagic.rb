@@ -23,8 +23,13 @@ describe 'MimeMagic' do
     MimeMagic.new('text/html').extensions.should.equal %w(htm html)
   end
 
+  it 'should have comment' do
+    MimeMagic.new('text/html').comment.should.equal 'HTML document'
+  end
+
   it 'should recognize extensions' do
     MimeMagic.by_extension('html').to_s.should.equal 'text/html'
+    MimeMagic.by_extension(:html).to_s.should.equal 'text/html'
     MimeMagic.by_extension('rb').to_s.should.equal 'application/x-ruby'
     MimeMagic.by_extension('crazy').should.equal nil
     MimeMagic.by_extension('').should.equal nil
@@ -39,9 +44,10 @@ describe 'MimeMagic' do
   end
 
   it 'should have add' do
-    MimeMagic.add('application/mimemagic-test', %w(ext1 ext2), %w(application/xml))
+    MimeMagic.add('application/mimemagic-test', :extensions => %w(ext1 ext2), :parents => 'application/xml', :comment => 'Comment')
     MimeMagic.by_extension('ext1').to_s.should.equal 'application/mimemagic-test'
     MimeMagic.by_extension('ext2').to_s.should.equal 'application/mimemagic-test'
+    MimeMagic.by_extension('ext2').comment.should.equal 'Comment'
     MimeMagic.new('application/mimemagic-test').extensions.should.equal %w(ext1 ext2)
     MimeMagic.new('application/mimemagic-test').should.be.child_of 'text/plain'
   end
