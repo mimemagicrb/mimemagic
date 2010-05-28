@@ -28,10 +28,10 @@ describe 'MimeMagic' do
   end
 
   it 'should recognize extensions' do
-    MimeMagic.by_extension('.html').to_s.should.equal 'text/html'
-    MimeMagic.by_extension('html').to_s.should.equal 'text/html'
-    MimeMagic.by_extension(:html).to_s.should.equal 'text/html'
-    MimeMagic.by_extension('rb').to_s.should.equal 'application/x-ruby'
+    MimeMagic.by_extension('.html').should.equal 'text/html'
+    MimeMagic.by_extension('html').should.equal 'text/html'
+    MimeMagic.by_extension(:html).should.equal 'text/html'
+    MimeMagic.by_extension('rb').should.equal 'application/x-ruby'
     MimeMagic.by_extension('crazy').should.equal nil
     MimeMagic.by_extension('').should.equal nil
   end
@@ -39,8 +39,8 @@ describe 'MimeMagic' do
   it 'should recognize by magic' do
     Dir['test/files/*'].each do |file|
       mime = file[11..-1].gsub('.', '/')
-      MimeMagic.by_magic(File.read(file)).to_s.should.equal mime
-      MimeMagic.by_magic(File.open(file, 'rb')).to_s.should.equal mime
+      MimeMagic.by_magic(File.read(file)).should.equal mime
+      MimeMagic.by_magic(File.open(file, 'rb')).should.equal mime
     end
   end
 
@@ -49,8 +49,8 @@ describe 'MimeMagic' do
                   :extensions => %w(ext1 ext2),
                   :parents => 'application/xml',
                   :comment => 'Comment')
-    MimeMagic.by_extension('ext1').to_s.should.equal 'application/mimemagic-test'
-    MimeMagic.by_extension('ext2').to_s.should.equal 'application/mimemagic-test'
+    MimeMagic.by_extension('ext1').should.equal 'application/mimemagic-test'
+    MimeMagic.by_extension('ext2').should.equal 'application/mimemagic-test'
     MimeMagic.by_extension('ext2').comment.should.equal 'Comment'
     MimeMagic.new('application/mimemagic-test').extensions.should.equal %w(ext1 ext2)
     MimeMagic.new('application/mimemagic-test').should.be.child_of 'text/plain'
@@ -62,11 +62,11 @@ describe 'MimeMagic' do
                              [1, 'MAGICTEST'], # MAGICTEST at position 1
                              [2, 'MAGICTEST', [[0, 'X'], [0, 'Y']]]]) # MAGICTEST at position 2 and (X at 0 or Y at 0)
 
-    MimeMagic.by_magic('MAGICTEST').to_s.should.equal 'application/mimemagic-test'
-    MimeMagic.by_magic('XMAGICTEST').to_s.should.equal 'application/mimemagic-test'
-    MimeMagic.by_magic(' MAGICTEST').to_s.should.equal 'application/mimemagic-test'
-    MimeMagic.by_magic('X MAGICTEST').to_s.should.equal 'application/mimemagic-test'
-    MimeMagic.by_magic('Y MAGICTEST').to_s.should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic('MAGICTEST').should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic('XMAGICTEST').should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic(' MAGICTEST').should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic('X MAGICTEST').should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic('Y MAGICTEST').should.equal 'application/mimemagic-test'
     MimeMagic.by_magic('Z MAGICTEST').should.equal nil
   end
 end
