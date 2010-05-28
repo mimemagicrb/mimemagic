@@ -14,12 +14,13 @@ class MimeMagic
     @subtype   = @type.split('/')[1]
   end
 
-  # Add custom mime type. You have to
-  # specify the type, a string list of file extensions,
-  # a string list of parent mime types and an optional
-  # detector block for magic detection.
+  # Add custom mime type. Arguments:
+  # * <i>type</i>: Mime type
+  # * <i>extensions</i>: String list of file extensions
+  # * <i>parents</i>: String list of parent mime types
+  # * <i>magics</i>: Mime magic specification array
   def self.add(type, extensions, parents, *magics)
-    TYPES[type] = [extensions, parents, block_given? ? proc(&block) : nil]
+    TYPES[type] = [extensions, parents, magics]
     extensions.each do |ext|
       EXTENSIONS[ext] = type
     end
@@ -30,6 +31,16 @@ class MimeMagic
   def text?
     child_of? 'text/plain'
   end
+
+  # Returns true if type is image
+  def image?
+    mediatype == 'image'
+  end
+
+  # Mediatype shortcuts
+  def image?; mediatype == 'image'; end
+  def audio?; mediatype == 'audio'; end
+  def video?; mediatype == 'video'; end
 
   # Returns true if type is child of parent type
   def child_of?(parent)
@@ -48,14 +59,14 @@ class MimeMagic
     mime ? new(mime) : nil
   end
 
-  # Lookup mime type by magic content analysis
-  # That could be slow
-  def self.by_magic(content)
-    if String === content
-      content.force_encoding('ascii-8bit') if content.respond_to? :force_encoding
-      content = StringIO.new(content.to_s, 'rb')
+  # Lookup mime type by magic content analysis.
+  # This is a slow operation.
+  def self.by_magic(io)
+    if !(io.respond_to?(:seek) && io.respond_to?(:read))
+      io = io.to_s
+      io.force_encoding('ascii-8bit') if io.respond_to?(:force_encoding)
+      io = StringIO.new(io, 'rb')
     end
-    io = content.respond_to?(:seek) ? content : StringIO.new(content.to_s, 'rb')
     mime = MAGIC.find {|type, matches| magic_match(io, matches) }
     mime ? new(mime[0]) : nil
   end
@@ -73,8 +84,7 @@ class MimeMagic
   private
 
   def child?(child, parent)
-    return true if child == parent
-    TYPES.key?(child) ? TYPES[child][1].any? {|p| child?(p, parent) } : false
+    child == parent || TYPES.key?(child) && TYPES[child][1].any? {|p| child?(p, parent) }
   end
 
   def self.magic_match(io, matches)
@@ -91,4 +101,6 @@ class MimeMagic
   rescue
     false
   end
+
+  private_class_method :magic_match
 end

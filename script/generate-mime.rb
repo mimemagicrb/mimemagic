@@ -48,7 +48,12 @@ def get_matches(parent)
   }.compact
 end
 
-FILE = ARGV[0] || '/usr/share/mime/packages/freedesktop.org.xml'
+if ARGV.size != 1
+  puts "Usage: #{$0} <freedesktop.org.xml>"
+  exit 1
+end
+
+FILE = ARGV[0]
 file = File.new(FILE)
 doc = REXML::Document.new(file)
 extensions = {}
