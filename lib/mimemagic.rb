@@ -3,7 +3,7 @@ require 'stringio'
 
 # Mime type detection
 class MimeMagic
-  VERSION = '0.1.2'
+  VERSION = '0.1.4'
 
   attr_reader :type, :mediatype, :subtype
 
@@ -23,15 +23,13 @@ class MimeMagic
   # * <i>:parents</i>: String list or single string of parent mime types
   # * <i>:magic</i>: Mime magic specification
   # * <i>:comment</i>: Comment string
-  def self.add(type, options = {})
+  def self.add(type, options)
     extensions = [options[:extensions]].flatten.compact
     TYPES[type] = [extensions,
                   [options[:parents]].flatten.compact,
                   options[:comment]]
-    extensions.each do |ext|
-      EXTENSIONS[ext] = type
-    end
-    MAGIC.unshift [type, [options[:magic]].flatten.compact] if options[:magic]
+    extensions.each {|ext| EXTENSIONS[ext] = type }
+    MAGIC.unshift [type, options[:magic]] if options[:magic]
   end
 
   # Returns true if type is a text format

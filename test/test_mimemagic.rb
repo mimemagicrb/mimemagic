@@ -28,6 +28,7 @@ describe 'MimeMagic' do
   end
 
   it 'should recognize extensions' do
+    MimeMagic.by_extension('.html').to_s.should.equal 'text/html'
     MimeMagic.by_extension('html').to_s.should.equal 'text/html'
     MimeMagic.by_extension(:html).to_s.should.equal 'text/html'
     MimeMagic.by_extension('rb').to_s.should.equal 'application/x-ruby'
@@ -44,11 +45,28 @@ describe 'MimeMagic' do
   end
 
   it 'should have add' do
-    MimeMagic.add('application/mimemagic-test', :extensions => %w(ext1 ext2), :parents => 'application/xml', :comment => 'Comment')
+    MimeMagic.add('application/mimemagic-test',
+                  :extensions => %w(ext1 ext2),
+                  :parents => 'application/xml',
+                  :comment => 'Comment')
     MimeMagic.by_extension('ext1').to_s.should.equal 'application/mimemagic-test'
     MimeMagic.by_extension('ext2').to_s.should.equal 'application/mimemagic-test'
     MimeMagic.by_extension('ext2').comment.should.equal 'Comment'
     MimeMagic.new('application/mimemagic-test').extensions.should.equal %w(ext1 ext2)
     MimeMagic.new('application/mimemagic-test').should.be.child_of 'text/plain'
+  end
+
+  it 'should process magic' do
+    MimeMagic.add('application/mimemagic-test',
+                  :magic => [[0, 'MAGICTEST'], # MAGICTEST at position 0
+                             [1, 'MAGICTEST'], # MAGICTEST at position 1
+                             [2, 'MAGICTEST', [[0, 'X'], [0, 'Y']]]]) # MAGICTEST at position 2 and (X at 0 or Y at 0)
+
+    MimeMagic.by_magic('MAGICTEST').to_s.should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic('XMAGICTEST').to_s.should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic(' MAGICTEST').to_s.should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic('X MAGICTEST').to_s.should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic('Y MAGICTEST').to_s.should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic('Z MAGICTEST').should.equal nil
   end
 end
