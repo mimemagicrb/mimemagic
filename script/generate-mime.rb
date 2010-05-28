@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 
-require 'rexml/document'
+gem 'nokogiri', '>= 0'
+require 'nokogiri'
 
 def str2int(s)
   return s.to_i(16) if s[0..1].downcase == '0x'
@@ -9,13 +10,13 @@ def str2int(s)
 end
 
 def get_matches(parent)
-  parent.get_elements('match').map {|match|
-    if match.attributes['mask']
+  parent.elements.map {|match|
+    if match['mask']
       nil
     else
-      type = match.attributes['type']
-      value = match.attributes['value']
-      offset = match.attributes['offset'].split(':').map {|x| x.to_i }
+      type = match['type']
+      value = match['value']
+      offset = match['offset'].split(':').map {|x| x.to_i }
       offset = offset.size == 2 ? offset[0]..offset[1] : offset[0]
       case type
       when 'string'
@@ -55,16 +56,16 @@ end
 
 FILE = ARGV[0]
 file = File.new(FILE)
-doc = REXML::Document.new(file)
+doc = Nokogiri::XML(file)
 extensions = {}
 types = {}
 magics = []
-doc.each_element('mime-info/mime-type') do |mime|
-  type = mime.attributes['type']
-  subclass = mime.get_elements('sub-class-of').map{|x| x.attributes['type']}
-  exts = mime.get_elements('glob').map{|x| x.attributes['pattern'] =~ /^\*\.([^\[\]]+)$/ ? $1.downcase : nil }.compact
-  mime.get_elements('magic').each do |magic|
-    priority = magic.attributes['priority'].to_i
+(doc/'mime-info/mime-type').each do |mime|
+  type = mime['type']
+  subclass = (mime/'sub-class-of').map{|x| x['type']}
+  exts = (mime/'glob').map{|x| x['pattern'] =~ /^\*\.([^\[\]]+)$/ ? $1.downcase : nil }.compact
+  (mime/'magic').each do |magic|
+    priority = magic['priority'].to_i
     matches = get_matches(magic)
     magics << [priority, type, matches]
   end
@@ -88,9 +89,9 @@ end
 puts "  }"
 puts "  TYPES = {"
 types.keys.sort.each do |key|
-  exts = types[key][0].sort.inspect
-  parents = types[key][1].sort.inspect
-  puts "    '#{key}' => [#{exts}, #{parents}],"
+  exts = types[key][0].sort.join(' ')
+  parents = types[key][1].sort.join(' ')
+  puts "    '#{key}' => [%w(#{exts}), %w(#{parents})],"
 end
 puts "  }"
 puts "  MAGIC = ["
@@ -99,4 +100,3 @@ magics.each do |type, matches|
 end
 puts "  ]"
 puts "end"
-
