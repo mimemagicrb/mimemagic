@@ -1,5 +1,3 @@
-gem 'bacon', '>= 0'
-
 require 'bacon'
 require 'mimemagic'
 

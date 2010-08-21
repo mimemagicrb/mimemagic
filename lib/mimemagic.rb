@@ -73,9 +73,7 @@ class MimeMagic
   # This is a slow operation.
   def self.by_magic(io)
     if !(io.respond_to?(:seek) && io.respond_to?(:read))
-      io = io.to_s
-      io.force_encoding('ascii-8bit') if io.respond_to?(:force_encoding)
-      io = StringIO.new(io, 'rb')
+      io = StringIO.new(io.to_s, 'rb:binary')
     end
     mime = MAGIC.find {|type, matches| magic_match(io, matches) }
     mime ? new(mime[0]) : nil

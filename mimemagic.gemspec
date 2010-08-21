@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.files = %w{
 lib/mimemagic.rb
 lib/mimemagic_tables.rb
-test/test_mimemagic.rb
+test/mimemagic_test.rb
 test/files/application.x-bzip
 test/files/image.jpeg
 test/files/image.png
@@ -31,19 +31,6 @@ README
   s.rubygems_version = %q{1.3.1}
   s.summary = %q{Mime detection by extension or content}
   s.homepage = 'https://github.com/minad/mimemagic'
-  s.test_files = ["test/test_mimemagic.rb"]
-
-  if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
-    s.specification_version = 2
-
-    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_development_dependency(%q<hoe>, [">= 1.8.3"])
-    else
-      s.add_dependency(%q<hoe>, [">= 1.8.3"])
-    end
-  else
-    s.add_dependency(%q<hoe>, [">= 1.8.3"])
-  end
+  s.test_files = ["test/mimemagic_test.rb"]
 end
 
