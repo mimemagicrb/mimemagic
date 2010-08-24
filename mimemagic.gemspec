@@ -32,5 +32,5 @@ README
   s.summary = %q{Mime detection by extension or content}
   s.homepage = 'https://github.com/minad/mimemagic'
   s.test_files = ["test/mimemagic_test.rb"]
+  s.add_development_dependency('bacon')
 end
-
