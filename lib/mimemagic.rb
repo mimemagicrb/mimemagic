@@ -32,6 +32,15 @@ class MimeMagic
     MAGIC.unshift [type, options[:magic]] if options[:magic]
   end
 
+  # Removes a mime type from the dictionary.  You might want to do this if
+  # you're seeing impossible conflicts (for instance, application/x-gmc-link).
+  # * <i>type</i>: The mime type to remove.  All associated extensions and magic are removed too.
+  def self.remove(type)
+    EXTENSIONS.delete_if {|ext, t| t == type }
+    MAGIC.delete_if { |t, m| t == type }
+    TYPES.delete(type)
+  end
+
   # Returns true if type is a text format
   def text?
     child_of? 'text/plain'
