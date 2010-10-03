@@ -74,7 +74,7 @@ class MimeMagic
   # Lookup mime type by file extension
   def self.by_extension(ext)
     ext = ext.to_s.downcase
-    mime = EXTENSIONS[ext] || (ext[0..0] == '.' && EXTENSIONS[ext[1..-1]])
+    mime = ext[0..0] == '.' ? EXTENSIONS[ext[1..-1]] : EXTENSIONS[ext]
     mime ? new(mime) : nil
   end
 
