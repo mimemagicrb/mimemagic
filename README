@@ -6,6 +6,7 @@ Usage
    require 'mimemagic'
    MimeMagic.by_extension('html').text?
    MimeMagic.by_extension('.html').child_of? 'text/plain'
+   MimeMagic.by_path('filename.txt')
    MimeMagic.by_magic(File.open('test.html'))
    etc...
 
