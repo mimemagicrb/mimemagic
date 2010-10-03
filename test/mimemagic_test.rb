@@ -34,6 +34,14 @@ describe 'MimeMagic' do
     MimeMagic.by_extension('').should.equal nil
   end
 
+  it 'should recognize by a path' do
+    MimeMagic.by_path('/adsjkfa/kajsdfkadsf/kajsdfjasdf.html').should.equal 'text/html'
+    MimeMagic.by_path('something.html').should.equal 'text/html'
+    MimeMagic.by_path('wtf.rb').should.equal 'application/x-ruby'
+    MimeMagic.by_path('where/am.html/crazy').should.equal nil
+    MimeMagic.by_path('').should.equal nil
+  end
+
   it 'should recognize by magic' do
     Dir['test/files/*'].each do |file|
       mime = file[11..-1].gsub('.', '/')

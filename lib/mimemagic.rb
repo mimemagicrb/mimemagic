@@ -78,6 +78,11 @@ class MimeMagic
     mime ? new(mime) : nil
   end
 
+  # Lookup mime type by filename
+  def self.by_path(path)
+    by_extension(File.extname(path))
+  end
+
   # Lookup mime type by magic content analysis.
   # This is a slow operation.
   def self.by_magic(io)
