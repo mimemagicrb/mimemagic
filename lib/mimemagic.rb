@@ -9,9 +9,8 @@ class MimeMagic
 
   # Mime type by type string
   def initialize(type)
-    @type      = type
-    @mediatype = @type.split('/')[0]
-    @subtype   = @type.split('/')[1]
+    @type = type
+    @mediatype, @subtype = type.split('/', 2)
   end
 
   # Add custom mime type. Arguments:

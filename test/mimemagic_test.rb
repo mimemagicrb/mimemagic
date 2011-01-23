@@ -2,6 +2,12 @@ require 'bacon'
 require 'mimemagic'
 
 describe 'MimeMagic' do
+  it 'should have type, mediatype and subtype' do
+    MimeMagic.new('text/html').type.should.equal 'text/html'
+    MimeMagic.new('text/html').mediatype.should.equal 'text'
+    MimeMagic.new('text/html').subtype.should.equal 'html'
+  end
+
   it 'should have mediatype helpers' do
     MimeMagic.new('text/plain').should.be.text
     MimeMagic.new('text/html').should.be.text
