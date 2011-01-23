@@ -11,6 +11,7 @@ describe 'MimeMagic' do
   it 'should have mediatype helpers' do
     MimeMagic.new('text/plain').should.be.text
     MimeMagic.new('text/html').should.be.text
+    MimeMagic.new('application/xhtml+xml').should.be.text
     MimeMagic.new('application/octet-stream').should.not.be.text
     MimeMagic.new('image/png').should.not.be.text
     MimeMagic.new('image/png').should.be.image

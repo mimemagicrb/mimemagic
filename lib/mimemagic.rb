@@ -41,14 +41,7 @@ class MimeMagic
   end
 
   # Returns true if type is a text format
-  def text?
-    child_of? 'text/plain'
-  end
-
-  # Returns true if type is image
-  def image?
-    mediatype == 'image'
-  end
+  def text?; mediatype == 'text' || child_of?('text/plain'); end
 
   # Mediatype shortcuts
   def image?; mediatype == 'image'; end
