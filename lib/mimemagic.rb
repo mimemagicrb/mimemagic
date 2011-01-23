@@ -36,7 +36,7 @@ class MimeMagic
   # * <i>type</i>: The mime type to remove.  All associated extensions and magic are removed too.
   def self.remove(type)
     EXTENSIONS.delete_if {|ext, t| t == type }
-    MAGIC.delete_if { |t, m| t == type }
+    MAGIC.delete_if {|t, m| t == type }
     TYPES.delete(type)
   end
 
@@ -50,7 +50,7 @@ class MimeMagic
 
   # Returns true if type is child of parent type
   def child_of?(parent)
-    child?(type, parent)
+    MimeMagic.child?(type, parent)
   end
 
   # Get string list of file extensions
@@ -67,7 +67,7 @@ class MimeMagic
   def self.by_extension(ext)
     ext = ext.to_s.downcase
     mime = ext[0..0] == '.' ? EXTENSIONS[ext[1..-1]] : EXTENSIONS[ext]
-    mime ? new(mime) : nil
+    mime && new(mime)
   end
 
   # Lookup mime type by filename
@@ -82,7 +82,7 @@ class MimeMagic
       io = StringIO.new(io.to_s, 'rb:binary')
     end
     mime = MAGIC.find {|type, matches| magic_match(io, matches) }
-    mime ? new(mime[0]) : nil
+    mime && new(mime[0])
   end
 
   # Return type as string
@@ -97,7 +97,7 @@ class MimeMagic
 
   private
 
-  def child?(child, parent)
+  def self.child?(child, parent)
     child == parent || TYPES.key?(child) && TYPES[child][1].any? {|p| child?(p, parent) }
   end
 
