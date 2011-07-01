@@ -91,9 +91,15 @@ class MimeMagic
   end
 
   # Allow comparison with string
-  def ==(x)
-    type == x.to_s
+  def eql?(other)
+    type == other.to_s
   end
+
+  def hash
+    type.hash
+  end
+
+  alias == eql?
 
   private
 
