@@ -82,4 +82,20 @@ describe 'MimeMagic' do
     MimeMagic.by_magic('Y MAGICTEST').should.equal 'application/mimemagic-test'
     MimeMagic.by_magic('Z MAGICTEST').should.equal nil
   end
+
+  it 'should handle different file objects' do
+    MimeMagic.add('application/mimemagic-test', :magic => [[0, 'MAGICTEST']])
+    class ReadableObj
+      def read
+        'MAGICTEST'
+      end
+    end
+    MimeMagic.by_magic(ReadableObj.new).should.equal 'application/mimemagic-test'
+    class StringableObject
+      def to_s
+        'MAGICTEST'
+      end
+    end
+    MimeMagic.by_magic(StringableObject.new).should.equal 'application/mimemagic-test'
+  end
 end
