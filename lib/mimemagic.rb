@@ -79,7 +79,8 @@ class MimeMagic
   # This is a slow operation.
   def self.by_magic(io)
     if !(io.respond_to?(:seek) && io.respond_to?(:read))
-      io = StringIO.new(io.to_s, 'rb:binary')
+      str = io.respond_to?(:read) ? io.read : io.to_s
+      io = StringIO.new(str, 'rb:binary')
     end
     mime = MAGIC.find {|type, matches| magic_match(io, matches) }
     mime && new(mime[0])
