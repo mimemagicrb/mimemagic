@@ -18,4 +18,5 @@ Gem::Specification.new do |s|
   s.homepage = 'https://github.com/minad/mimemagic'
 
   s.add_development_dependency('bacon')
+  s.add_development_dependency('rake')
 end
