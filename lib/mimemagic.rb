@@ -1,10 +1,9 @@
-require 'mimemagic_tables'
+require 'mimemagic/tables'
+require 'mimemagic/version'
 require 'stringio'
 
 # Mime type detection
 class MimeMagic
-  VERSION = '0.1.8'
-
   attr_reader :type, :mediatype, :subtype
 
   # Mime type by type string
