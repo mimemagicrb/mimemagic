@@ -10,6 +10,11 @@ Usage
    MimeMagic.by_magic(File.open('test.html'))
    etc...
 
+API
+===
+
+http://rdoc.info/github/minad/mimemagic/frames/file/README
+
 Authors
 =======
 
