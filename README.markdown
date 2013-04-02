@@ -5,12 +5,12 @@ MimeMagic is a library to detect the mime type of a file by extension or by cont
 Usage
 =====
 
-   require 'mimemagic'
-   MimeMagic.by_extension('html').text?
-   MimeMagic.by_extension('.html').child_of? 'text/plain'
-   MimeMagic.by_path('filename.txt')
-   MimeMagic.by_magic(File.open('test.html'))
-   etc...
+    require 'mimemagic'
+    MimeMagic.by_extension('html').text?
+    MimeMagic.by_extension('.html').child_of? 'text/plain'
+    MimeMagic.by_path('filename.txt')
+    MimeMagic.by_magic(File.open('test.html'))
+    # etc...
 
 API
 ===
