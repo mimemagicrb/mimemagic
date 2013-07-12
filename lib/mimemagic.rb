@@ -2,6 +2,17 @@ require 'mimemagic/tables'
 require 'mimemagic/version'
 require 'stringio'
 
+#
+# Add a stubbed force_encoding for ruby 1.8
+#
+if ! "".respond_to?(:force_encoding)
+  class String
+    def force_encoding(enc)
+      self
+    end
+  end
+end
+
 # Mime type detection
 class MimeMagic
   attr_reader :type, :mediatype, :subtype
