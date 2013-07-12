@@ -77,9 +77,9 @@ class MimeMagic
   # Lookup mime type by magic content analysis.
   # This is a slow operation.
   def self.by_magic(io)
-    if !(io.respond_to?(:seek) && io.respond_to?(:read))
-      str = io.respond_to?(:read) ? io.read : io.to_s
-      io = StringIO.new(str, 'rb:binary')
+    if !(io.respond_to?(:seek, true) && io.respond_to?(:read, true))
+      str = io.respond_to?(:read, true) ? io.read : io.to_s
+      io = StringIO.new(str, 'rb')
     end
     mime = MAGIC.find {|type, matches| magic_match(io, matches) }
     mime && new(mime[0])
@@ -109,13 +109,18 @@ class MimeMagic
 
   def self.magic_match(io, matches)
     matches.any? do |offset, value, children|
+      tmpval = value.force_encoding("ASCII-8BIT")
+
       match = if Range === offset
-		io.seek(offset.begin)
-                io.read(offset.end - offset.begin + value.length).include?(value)
+                io.seek(offset.begin)
+                x = io.read(offset.end - offset.begin + tmpval.length).force_encoding("ASCII-8BIT")
+                x.include?(tmpval)
               else
                 io.seek(offset)
-		value == io.read(value.length)
+                x = io.read(tmpval.length).force_encoding("ASCII-8BIT")
+                tmpval == x
               end
+
       match && (!children || magic_match(io, children))
     end
   rescue
