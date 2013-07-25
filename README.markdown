@@ -17,6 +17,15 @@ API
 
 http://rdoc.info/github/minad/mimemagic/frames/file/README
 
+Tests
+=====
+
+```
+bundle install
+
+rake test
+```
+
 Authors
 =======
 
