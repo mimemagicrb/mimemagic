@@ -109,12 +109,17 @@ class MimeMagic
 
   def self.magic_match(io, matches)
     matches.any? do |offset, value, children|
+      value = value.b if value.respond_to?(:b)
       match = if Range === offset
-		io.seek(offset.begin)
-                io.read(offset.end - offset.begin + value.length).include?(value)
+                io.seek(offset.begin)
+                io_val = io.read(offset.end - offset.begin + value.length)
+                io_val = io_val.b if io_val.respond_to?(:b)
+                io_val.include?(value)
               else
                 io.seek(offset)
-		value == io.read(value.length)
+                io_val = io.read(value.length)
+                io_val = io_val.b if io_val.respond_to?(:b)
+                value == io_val
               end
       match && (!children || magic_match(io, children))
     end
