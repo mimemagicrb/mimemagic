@@ -1,7 +1,17 @@
 #!/usr/bin/ruby
 
-gem 'nokogiri', '>= 0'
 require 'nokogiri'
+
+class String
+  alias inspect_old inspect
+
+  def inspect
+    x = b.inspect_old.gsub(/\\x([0-9a-f]{2})/i) do
+      '\\%03o' % $1.to_i(16)
+    end
+    x =~ /[\\']/ ? x : x.gsub('"', '\'')
+  end
+end
 
 def str2int(s)
   return s.to_i(16) if s[0..1].downcase == '0x'
@@ -61,7 +71,7 @@ extensions = {}
 types = {}
 magics = []
 (doc/'mime-info/mime-type').each do |mime|
-  comments = Hash[*(mime/'comment').map {|comment| [comment['lang'], comment.inner_text] }.flatten]
+  comments = Hash[*(mime/'comment').map {|comment| [comment['xml:lang'], comment.inner_text] }.flatten]
   type = mime['type']
   subclass = (mime/'sub-class-of').map{|x| x['type']}
   exts = (mime/'glob').map{|x| x['pattern'] =~ /^\*\.([^\[\]]+)$/ ? $1.downcase : nil }.compact
@@ -97,7 +107,7 @@ types.keys.sort.each do |key|
 end
 puts "  }"
 puts "  MAGIC = ["
-magics.each do |type, matches|
+magics.sort.each do |type, matches|
   puts "    ['#{type}', #{matches.inspect}],"
 end
 puts "  ]"
