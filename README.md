@@ -1,4 +1,5 @@
-MimeMagic is a library to detect the mime type of a file by extension or by content.
+MimeMagic is a library to detect the mime type of a file by extension or by content. It uses the mime database
+provided by freedesktop.org (see http://freedesktop.org/wiki/Software/shared-mime-info/).
 
 [![Build Status](https://secure.travis-ci.org/minad/mimemagic.png?branch=master)](http://travis-ci.org/minad/mimemagic) [![Code Climate](https://codeclimate.com/github/minad/mimemagic.png)](https://codeclimate.com/github/minad/mimemagic)
 
@@ -15,7 +16,7 @@ Usage
 API
 ===
 
-http://rdoc.info/github/minad/mimemagic/frames/file/README
+http://rdoc.info/github/minad/mimemagic/frames/file/README.md
 
 Tests
 =====
