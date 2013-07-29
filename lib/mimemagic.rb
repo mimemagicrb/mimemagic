@@ -83,7 +83,7 @@ class MimeMagic
         MAGIC.find {|type, matches| magic_match_str(str, matches) }
       else
         io.binmode
-        io.set_encoding(Encoding::BINARY, Encoding::BINARY) if io.respond_to?(:set_encoding)
+        io.set_encoding(Encoding::BINARY) if io.respond_to?(:set_encoding)
         MAGIC.find {|type, matches| magic_match_io(io, matches) }
       end
     mime && new(mime[0])
