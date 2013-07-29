@@ -79,10 +79,11 @@ class MimeMagic
     mime =
       unless io.respond_to?(:seek) && io.respond_to?(:read)
         str = io.respond_to?(:read) ? io.read : io.to_s
-        str = str.b if str.respond_to? :b
+        str = str.force_encoding(Encoding::BINARY) if str.respond_to? :force_encoding
         MAGIC.find {|type, matches| magic_match_str(str, matches) }
       else
         io.binmode
+        io.set_encoding(Encoding::BINARY, Encoding::BINARY) if io.respond_to?(:set_encoding)
         MAGIC.find {|type, matches| magic_match_io(io, matches) }
       end
     mime && new(mime[0])
@@ -113,29 +114,27 @@ class MimeMagic
       match =
         if Range === offset
           io.seek(offset.begin)
-          io.read(offset.end - offset.begin + value.length).include?(value)
+          x = io.read(offset.end - offset.begin + value.bytesize)
+          x && x.include?(value)
         else
           io.seek(offset)
-          io.read(value.length) == value
+          io.read(value.bytesize) == value
         end
       match && (!children || magic_match_io(io, children))
     end
-  rescue
-    false
   end
 
   def self.magic_match_str(str, matches)
     matches.any? do |offset, value, children|
       match =
         if Range === offset
-          str[offset.begin, offset.end - offset.begin + value.length].include?(value)
+          x = str[offset.begin, offset.end - offset.begin + value.bytesize]
+          x && x.include?(value)
         else
-          str[offset, value.length] == value
+          str[offset, value.bytesize] == value
         end
       match && (!children || magic_match_str(str, children))
     end
-  rescue
-    false
   end
 
   private_class_method :magic_match_io, :magic_match_str
