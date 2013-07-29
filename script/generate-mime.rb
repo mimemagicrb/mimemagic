@@ -88,7 +88,7 @@ magics = []
   end
 end
 
-magics = magics.sort {|a,b| b[0] <=> a[0] }.map {|x| [x[1], x[2]] }
+magics = magics.sort {|a,b| [-a[0],a[1]] <=> [-b[0],b[1]] }
 
 puts "# -*- coding: binary -*-"
 puts "# Generated from #{FILE}"
@@ -113,7 +113,7 @@ puts "  }"
 puts "  # @private"
 puts "  # :nodoc:"
 puts "  MAGIC = ["
-magics.sort.each do |type, matches|
+magics.each do |priority, type, matches|
   puts "    ['#{type}', #{matches.inspect}],"
 end
 puts "  ]"
