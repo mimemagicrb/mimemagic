@@ -1,6 +1,5 @@
 require 'mimemagic/tables'
 require 'mimemagic/version'
-require 'stringio'
 
 # Mime type detection
 class MimeMagic
@@ -77,11 +76,15 @@ class MimeMagic
   # Lookup mime type by magic content analysis.
   # This is a slow operation.
   def self.by_magic(io)
-    if !(io.respond_to?(:seek) && io.respond_to?(:read))
-      str = io.respond_to?(:read) ? io.read : io.to_s
-      io = StringIO.new(str, 'rb:binary')
-    end
-    mime = MAGIC.find {|type, matches| magic_match(io, matches) }
+    mime =
+      unless io.respond_to?(:seek) && io.respond_to?(:read)
+        str = io.respond_to?(:read) ? io.read : io.to_s
+        str = str.b if str.respond_to? :b
+        MAGIC.find {|type, matches| magic_match_str(str, matches) }
+      else
+        io.binmode
+        MAGIC.find {|type, matches| magic_match_io(io, matches) }
+      end
     mime && new(mime[0])
   end
 
@@ -101,31 +104,39 @@ class MimeMagic
 
   alias == eql?
 
-  private
-
   def self.child?(child, parent)
     child == parent || TYPES.key?(child) && TYPES[child][1].any? {|p| child?(p, parent) }
   end
 
-  def self.magic_match(io, matches)
+  def self.magic_match_io(io, matches)
     matches.any? do |offset, value, children|
-      value = value.b if value.respond_to?(:b)
-      match = if Range === offset
-                io.seek(offset.begin)
-                io_val = io.read(offset.end - offset.begin + value.length)
-                io_val = io_val.b if io_val.respond_to?(:b)
-                io_val.include?(value)
-              else
-                io.seek(offset)
-                io_val = io.read(value.length)
-                io_val = io_val.b if io_val.respond_to?(:b)
-                value == io_val
-              end
-      match && (!children || magic_match(io, children))
+      match =
+        if Range === offset
+          io.seek(offset.begin)
+          io.read(offset.end - offset.begin + value.length).include?(value)
+        else
+          io.seek(offset)
+          io.read(value.length) == value
+        end
+      match && (!children || magic_match_io(io, children))
     end
   rescue
     false
   end
 
-  private_class_method :magic_match
+  def self.magic_match_str(str, matches)
+    matches.any? do |offset, value, children|
+      match =
+        if Range === offset
+          str[offset.begin, offset.end - offset.begin + value.length].include?(value)
+        else
+          str[offset, value.length] == value
+        end
+      match && (!children || magic_match_str(str, children))
+    end
+  rescue
+    false
+  end
+
+  private_class_method :magic_match_io, :magic_match_str
 end

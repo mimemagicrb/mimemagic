@@ -1,5 +1,6 @@
 require 'bacon'
 require 'mimemagic'
+require 'stringio'
 
 describe 'MimeMagic' do
   it 'should have type, mediatype and subtype' do
@@ -73,14 +74,30 @@ describe 'MimeMagic' do
     MimeMagic.add('application/mimemagic-test',
                   :magic => [[0, 'MAGICTEST'], # MAGICTEST at position 0
                              [1, 'MAGICTEST'], # MAGICTEST at position 1
+                             [9..12, 'MAGICTEST'], # MAGICTEST starting at position 9 to 12
                              [2, 'MAGICTEST', [[0, 'X'], [0, 'Y']]]]) # MAGICTEST at position 2 and (X at 0 or Y at 0)
 
     MimeMagic.by_magic('MAGICTEST').should.equal 'application/mimemagic-test'
     MimeMagic.by_magic('XMAGICTEST').should.equal 'application/mimemagic-test'
     MimeMagic.by_magic(' MAGICTEST').should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic('123456789MAGICTEST').should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic('123456789ABMAGICTEST').should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic('123456789ABCMAGICTEST').should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic('123456789ABCDMAGICTEST').should.equal nil
     MimeMagic.by_magic('X MAGICTEST').should.equal 'application/mimemagic-test'
     MimeMagic.by_magic('Y MAGICTEST').should.equal 'application/mimemagic-test'
     MimeMagic.by_magic('Z MAGICTEST').should.equal nil
+
+    MimeMagic.by_magic(StringIO.new 'MAGICTEST').should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic(StringIO.new 'XMAGICTEST').should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic(StringIO.new ' MAGICTEST').should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic(StringIO.new '123456789MAGICTEST').should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic(StringIO.new '123456789ABMAGICTEST').should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic(StringIO.new '123456789ABCMAGICTEST').should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic(StringIO.new '123456789ABCDMAGICTEST').should.equal nil
+    MimeMagic.by_magic(StringIO.new 'X MAGICTEST').should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic(StringIO.new 'Y MAGICTEST').should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic(StringIO.new 'Z MAGICTEST').should.equal nil
   end
 
   it 'should handle different file objects' do

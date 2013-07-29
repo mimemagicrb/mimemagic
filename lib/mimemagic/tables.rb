@@ -1,6 +1,8 @@
+# -*- coding: binary -*-
 # Generated from freedesktop.org.xml
 class MimeMagic
-  private
+  # @private
+  # :nodoc:
   EXTENSIONS = {
     '123' => 'application/vnd.lotus-1-2-3',
     '3ds' => 'image/x-3ds',
@@ -808,6 +810,8 @@ class MimeMagic
     'zip' => 'application/zip',
     'zoo' => 'application/x-zoo',
   }
+  # @private
+  # :nodoc:
   TYPES = {
     'application/andrew-inset' => [%w(ez), %w(), 'ATK inset'],
     'application/annodex' => [%w(anx), %w(), 'Annodex exchange format'],
@@ -1386,6 +1390,8 @@ class MimeMagic
     'video/x-theora+ogg' => [%w(ogg ogv), %w(video/ogg), 'Ogg Theora video'],
     'x-epoc/x-sisx-app' => [%w(sisx), %w(), 'SISX package'],
   }
+  # @private
+  # :nodoc:
   MAGIC = [
     ['application/annodex', [[0, 'OggS', [[28, "fishead\000", [[56..512, "CMML\000\000\000\000"]]]]]]],
     ['application/atom+xml', [[0..256, '<feed ']]],

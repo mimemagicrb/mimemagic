@@ -90,14 +90,18 @@ end
 
 magics = magics.sort {|a,b| b[0] <=> a[0] }.map {|x| [x[1], x[2]] }
 
+puts "# -*- coding: binary -*-"
 puts "# Generated from #{FILE}"
 puts "class MimeMagic"
-puts "  private"
+puts "  # @private"
+puts "  # :nodoc:"
 puts "  EXTENSIONS = {"
 extensions.keys.sort.each do |key|
   puts "    '#{key}' => '#{extensions[key]}',"
 end
 puts "  }"
+puts "  # @private"
+puts "  # :nodoc:"
 puts "  TYPES = {"
 types.keys.sort.each do |key|
   exts = types[key][0].sort.join(' ')
@@ -106,6 +110,8 @@ types.keys.sort.each do |key|
   puts "    '#{key}' => [%w(#{exts}), %w(#{parents}), #{comment}],"
 end
 puts "  }"
+puts "  # @private"
+puts "  # :nodoc:"
 puts "  MAGIC = ["
 magics.sort.each do |type, matches|
   puts "    ['#{type}', #{matches.inspect}],"
