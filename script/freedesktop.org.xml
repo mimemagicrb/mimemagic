@@ -153,6 +153,7 @@
       <match value="PK\003\004" type="string" offset="0">
         <match value="mimetype" type="string" offset="30">
           <match value="application/epub+zip" type="string" offset="38"/>
+          <match value="application/epub+zip" type="string" offset="43"/>
         </match>
       </match>
     </magic>
@@ -966,7 +967,7 @@
     </magic>
     <glob pattern="*.pgp"/>
     <glob pattern="*.gpg"/>
-    <glob pattern="*.asc"/>
+    <glob weight="10" pattern="*.asc"/>
     <alias type="application/pgp"/>
   </mime-type>
   <mime-type type="application/pgp-keys">
@@ -1032,7 +1033,9 @@
     </magic>
     <glob pattern="*.skr"/>
     <glob pattern="*.pkr"/>
-    <glob pattern="*.asc"/>
+    <glob weight="10" pattern="*.asc"/>
+    <glob pattern="*.pgp"/>
+    <glob pattern="*.gpg"/>
   </mime-type>
   <mime-type type="application/pgp-signature">
     <comment>detached OpenPGP signature</comment>
@@ -1084,9 +1087,12 @@
     <sub-class-of type="text/plain"/>
     <generic-icon name="text-x-generic"/>
     <magic priority="50">
-      <match value="-----BEGIN PGP SIGNED MESSAGE-----" type="string" offset="0"/>
       <match value="-----BEGIN PGP SIGNATURE-----" type="string" offset="0"/>
     </magic>
+    <glob weight="10" pattern="*.asc"/>
+    <glob pattern="*.sig"/>
+    <glob pattern="*.pgp"/>
+    <glob pattern="*.gpg"/>
   </mime-type>
   
   <mime-type type="application/pkcs7-mime">
@@ -3675,6 +3681,7 @@
     <magic priority="90">
       <match value="StarWriter" type="string" offset="2089"/>
     </magic>
+    <alias type="application/vnd.stardivision.writer-global"/>
   </mime-type>
   <mime-type type="application/vnd.sun.xml.calc">
     <comment>OpenOffice Calc spreadsheet</comment>
@@ -5254,6 +5261,7 @@
     <sub-class-of type="application/zip"/>
     <generic-icon name="x-office-document"/>
     <glob pattern="*.odb"/>
+    <alias type="application/vnd.sun.xml.base"/>
   </mime-type>
   <mime-type type="application/vnd.oasis.opendocument.image">
     <comment>ODI image</comment>
@@ -5687,8 +5695,10 @@
     <alias type="application/x-spss-savefile"/>
     <magic priority="50">
       <match value="$FL2" type="string" offset="0"/>
+      <match value="$FL3" type="string" offset="0"/>
     </magic>
     <glob pattern="*.sav"/>
+    <glob pattern="*.zsav"/>
   </mime-type>
   <mime-type type="application/x-xbel">
     <comment>XBEL bookmarks</comment>
@@ -7128,6 +7138,17 @@
     <comment xml:lang="zh_TW">Apple 磁碟映像</comment>
     <glob pattern="*.dmg"/>
   </mime-type>
+  <mime-type type="application/x-raw-disk-image">
+     <comment>Raw disk image</comment>
+     <glob pattern="*.raw-disk-image"/>
+     <glob pattern="*.img"/>
+   </mime-type>
+   <mime-type type="application/x-raw-disk-image-xz-compressed">
+     <comment>Raw disk image (XZ-compressed)</comment>
+     <sub-class-of type="application/x-xz"/>
+     <glob pattern="*.raw-disk-image.xz"/>
+     <glob pattern="*.img.xz"/>
+   </mime-type>
   <mime-type type="application/x-cd-image">
     <comment>raw CD image</comment>
     <comment xml:lang="ar">صورة CD خامة</comment>
@@ -7174,6 +7195,7 @@
     <comment xml:lang="vi">ảnh đĩa CD thô</comment>
     <comment xml:lang="zh_CN">原始 CD 映像</comment>
     <comment xml:lang="zh_TW">原生 CD 映像</comment>
+    <sub-class-of type="application/x-raw-disk-image"/>
     <alias type="application/x-iso9660-image"/>
     <glob pattern="*.iso"/>
     <glob pattern="*.iso9660"/>
@@ -7716,10 +7738,10 @@
     <sub-class-of type="text/plain"/>
     <generic-icon name="text-x-script"/>
     <magic>
-      <match value="/bin/tcsh" type="string" offset="1:16"/>
-      <match value="/bin/csh" type="string" offset="1:16"/>
-      <match value="#!/usr/bin/env csh" type="string" offset="0"/>
-      <match value="#!/usr/bin/env tcsh" type="string" offset="0"/>
+      <match value="/bin/tcsh" type="string" offset="2:16"/>
+      <match value="/bin/csh" type="string" offset="2:16"/>
+      <match value="/bin/env csh" type="string" offset="2:16"/>
+      <match value="/bin/env tcsh" type="string" offset="2:16"/>
     </magic>
     <glob pattern="*.csh"/>
   </mime-type>
@@ -7920,6 +7942,33 @@
     <comment xml:lang="zh_TW">任天堂 DS ROM</comment>
     <generic-icon name="application-x-executable"/>
     <glob pattern="*.nds"/>
+  </mime-type>
+  <mime-type type="application/x-pc-engine-rom">
+    <comment>PC Engine ROM</comment>
+    <generic-icon name="application-x-executable"/>
+    <glob pattern="*.pce"/>
+  </mime-type>
+  <mime-type type="application/x-wii-rom">
+    <comment>Wii disc image</comment>
+    <alias type="application/x-wii-iso-image"/>
+    <alias type="application/x-wbfs"/>
+    <alias type="application/x-wia"/>
+    <generic-icon name="application-x-executable"/>
+    <glob pattern="*.iso"/>
+    <magic priority="50">
+      <match value="0x5d1c9ea3" type="big32" offset="24"/>
+      <match value="WBFS" type="string" offset="0"/>
+      <match value="WII\001DISC" type="string" offset="0"/>
+    </magic>
+  </mime-type>
+  <mime-type type="application/x-gamecube-rom">
+    <comment>GameCube disc image</comment>
+    <generic-icon name="application-x-executable"/>
+    <alias type="application/x-gamecube-iso-image"/>
+    <glob pattern="*.iso"/>
+    <magic priority="50">
+      <match value="0xc2339f3d" type="big32" offset="28"/>
+    </magic>
   </mime-type>
   <mime-type type="application/x-deb">
     <comment>Debian package</comment>
@@ -8177,6 +8226,17 @@
     </magic>
     <alias type="application/x-fictionbook"/>
     <root-XML namespaceURI="http://www.gribuser.ru/xml/fictionbook/2.0" localName="FictionBook"/>
+  </mime-type>
+  <mime-type type="application/x-zip-compressed-fb2">
+    <comment>Compressed FictionBook document</comment>
+    <sub-class-of type="application/zip"/>
+    <glob pattern="*.fb2.zip"/>
+    <magic priority="80">
+      <match value="PK\003\004" type="string" offset="0">
+        
+        <match value=".fb2" type="string" offset="30:256"/>
+      </match>
+    </magic>
   </mime-type>
   <mime-type type="application/x-dia-diagram">
     <comment>Dia diagram</comment>
@@ -10856,9 +10916,18 @@
     <comment xml:lang="zh_TW">JavaScript 程式</comment>
     <alias type="application/x-javascript"/>
     <alias type="text/javascript"/>
-    <sub-class-of type="text/x-csrc"/>
+    <sub-class-of type="application/ecmascript"/>
     <generic-icon name="text-x-script"/>
     <glob pattern="*.js"/>
+    <glob pattern="*.jsm"/>
+  </mime-type>
+  <mime-type type="application/json">
+    <comment>JSON document</comment>
+    <acronym>JSON</acronym>
+    <expanded-acronym>JavaScript Object Notation</expanded-acronym>
+    <sub-class-of type="application/javascript"/>
+    <generic-icon name="text-x-script"/>
+    <glob pattern="*.json"/>
   </mime-type>
   <mime-type type="application/x-jbuilder-project">
     <comment>JBuilder project</comment>
@@ -12174,6 +12243,15 @@
     <glob pattern="*.lyx"/>
     <alias type="text/x-lyx"/>
   </mime-type>
+  <mime-type type="application/x-lz4">
+    <comment>LZ4 archive</comment>
+    <generic-icon name="package-x-generic"/>
+    <magic priority="50">
+      <match value="0x184d2204" type="little32" offset="0"/>
+      <match value="0x184c2102" type="little32" offset="0"/>
+    </magic>
+    <glob pattern="*.lz4"/>
+  </mime-type>
   <mime-type type="application/x-lzip">
     <comment>Lzip archive</comment>
     <comment xml:lang="ar">أرشيف Lzip</comment>
@@ -12581,6 +12659,11 @@
     <comment xml:lang="zh_CN">Matroska 视频</comment>
     <comment xml:lang="zh_TW">Matroska 視訊</comment>
     <glob pattern="*.mkv"/>
+    <sub-class-of type="application/x-matroska"/>
+  </mime-type>
+  <mime-type type="video/x-matroska-3d">
+    <comment>Matroska 3D video</comment>
+    <glob pattern="*.mk3d"/>
     <sub-class-of type="application/x-matroska"/>
   </mime-type>
   <mime-type type="audio/x-matroska">
@@ -13826,6 +13909,7 @@
     </magic>
     <glob pattern="*.oga"/>
     <glob pattern="*.ogg"/>
+    <glob pattern="*.opus"/>
     <alias type="audio/x-ogg"/>
   </mime-type>
   <mime-type type="video/ogg">
@@ -13995,6 +14079,16 @@
     <glob pattern="*.oga"/>
     <glob pattern="*.ogg"/>
   </mime-type>
+  <mime-type type="audio/x-opus+ogg">
+    <comment>Opus audio</comment>
+    <sub-class-of type="audio/ogg"/>
+    <magic priority="80">
+      <match value="OggS" type="string" offset="0">
+        <match value="OpusHead" type="string" offset="28"/>
+      </match>
+    </magic>
+    <glob pattern="*.opus"/>
+  </mime-type>
   <mime-type type="audio/x-speex+ogg">
     <comment>Ogg Speex audio</comment>
     <comment xml:lang="ar">Ogg Speex سمعي</comment>
@@ -14145,7 +14239,6 @@
         <match value="\x80theora" type="string" offset="28"/>
       </match>
     </magic>
-    <glob pattern="*.ogv"/>
     <glob pattern="*.ogg"/>
   </mime-type>
   <mime-type type="video/x-ogm+ogg">
@@ -14254,6 +14347,11 @@
       <match value="\320\317\021\340\241\261\032\341" type="string" offset="0"/>
       <match value="0xe011cfd0" type="little32" offset="0"/>
     </magic>
+  </mime-type>
+  <mime-type type="application/vnd.ms-publisher">
+    <comment>Microsoft Publisher document</comment>
+    <sub-class-of type="application/x-ole-storage"/>
+    <glob pattern="*.pub"/>
   </mime-type>
   <mime-type type="application/x-msi">
     <comment>Windows Installer package</comment>
@@ -14618,13 +14716,26 @@
     <generic-icon name="text-x-script"/>
     <magic priority="50">
       <match value='eval \"exec /usr/local/bin/perl' type="string" offset="0"/>
-      <match value="/bin/perl" type="string" offset="1:16"/>
-      <match value="/bin/env perl" type="string" offset="1:16"/>
+      <match value="/bin/perl" type="string" offset="2:16"/>
+      <match value="/bin/env perl" type="string" offset="2:16"/>
+      <match value="use strict" type="string" offset="0:256"/>
+      <match value="use warnings" type="string" offset="0:256"/>
+      <match value="use diagnostics" type="string" offset="0:256"/>
+      <match value="use Test::" type="string" offset="0:256"/>
+      <match value="BEGIN {" type="string" offset="0:256"/>
+    </magic>
+    <magic priority="40">
+      <match value="\n=pod" type="string" offset="0:256"/>
+      <match value="\n=head1 NAME" type="string" offset="0:256"/>
+      <match value="\n=head1 DESCRIPTION" type="string" offset="0:256"/>
     </magic>
     <glob pattern="*.pl"/>
+    <glob pattern="*.PL"/>
     <glob pattern="*.pm"/>
     <glob pattern="*.al"/>
     <glob pattern="*.perl"/>
+    <glob pattern="*.pod"/>
+    <glob weight="10" pattern="*.t"/>
   </mime-type>
   <mime-type type="application/x-php">
     <comment>PHP script</comment>
@@ -15518,8 +15629,8 @@
     <sub-class-of type="text/plain"/>
     <generic-icon name="text-x-script"/>
     <magic>
-      <match value="/bin/env ruby" type="string" offset="1:16"/>
-      <match value="/bin/ruby" type="string" offset="1:16"/>
+      <match value="/bin/env ruby" type="string" offset="2:16"/>
+      <match value="/bin/ruby" type="string" offset="2:16"/>
     </magic>
     <glob pattern="*.rb"/>
   </mime-type>
@@ -15843,20 +15954,20 @@
     <generic-icon name="text-x-script"/>
     <magic priority="50">
       <match value="# This is a shell archive" type="string" offset="10"/>
-      <match value="/bin/bash" type="string" offset="1:16"/>
-      <match value="/bin/nawk" type="string" offset="1:16"/>
-      <match value="/bin/zsh" type="string" offset="1:16"/>
-      <match value="/bin/sh" type="string" offset="1:16"/>
-      <match value="/bin/ksh" type="string" offset="1:16"/>
-      <match value="/bin/dash" type="string" offset="1:16"/>
-      <match value="#!/usr/bin/env sh" type="string" offset="0"/>
-      <match value="#!/usr/bin/env bash" type="string" offset="0"/>
-      <match value="#!/usr/bin/env zsh" type="string" offset="0"/>
-      <match value="#!/usr/bin/env ksh" type="string" offset="0"/>
+      <match value="/bin/bash" type="string" offset="2:16"/>
+      <match value="/bin/nawk" type="string" offset="2:16"/>
+      <match value="/bin/zsh" type="string" offset="2:16"/>
+      <match value="/bin/sh" type="string" offset="2:16"/>
+      <match value="/bin/ksh" type="string" offset="2:16"/>
+      <match value="/bin/dash" type="string" offset="2:16"/>
+      <match value="/bin/env sh" type="string" offset="2:16"/>
+      <match value="/bin/env bash" type="string" offset="2:16"/>
+      <match value="/bin/env zsh" type="string" offset="2:16"/>
+      <match value="/bin/env ksh" type="string" offset="2:16"/>
     </magic>
     <glob pattern="*.sh"/>
   </mime-type>
-  <mime-type type="application/x-shockwave-flash">
+  <mime-type type="application/vnd.adobe.flash.movie">
     <comment>Shockwave Flash file</comment>
     <comment xml:lang="ar">ملف Shockwave Flash</comment>
     <comment xml:lang="be@latin">Fajł Shockwave Flash</comment>
@@ -15903,6 +16014,7 @@
     <comment xml:lang="vi">Tập tin Flash Shockwave</comment>
     <comment xml:lang="zh_CN">Shockwave Flash 文件</comment>
     <comment xml:lang="zh_TW">Shockwave Flash 檔</comment>
+    <alias type="application/x-shockwave-flash"/>
     <alias type="application/futuresplash"/>
     <generic-icon name="video-x-generic"/>
     <magic priority="50">
@@ -16162,7 +16274,7 @@
     <glob pattern="*.sms"/>
     <glob pattern="*.gg"/>
   </mime-type>
-  <mime-type type="application/x-snes-rom">
+  <mime-type type="application/vnd.nintendo.snes.rom">
     
     <comment>Super NES ROM</comment>
     <comment xml:lang="ar">Super NES ROM</comment>
@@ -16207,6 +16319,8 @@
     <comment xml:lang="zh_CN">Super NES ROM</comment>
     <comment xml:lang="zh_TW">超級任天堂 ROM</comment>
     <generic-icon name="application-x-executable"/>
+    <alias type="application/x-snes-rom"/>
+    <glob pattern="*.sfc"/>
     <glob pattern="*.smc"/>
   </mime-type>
   <mime-type type="application/x-stuffit">
@@ -17419,7 +17533,7 @@
     </magic>
     <glob pattern="*.tr"/>
     <glob pattern="*.roff"/>
-    <glob pattern="*.t"/>
+    <glob weight="10" pattern="*.t"/>
   </mime-type>
   <mime-type type="application/x-troff-man">
     <comment>Troff document (with manpage macros)</comment>
@@ -19779,7 +19893,7 @@
     <comment xml:lang="vi">Âm thanh Windows Media</comment>
     <comment xml:lang="zh_CN">Windows Media 音频</comment>
     <comment xml:lang="zh_TW">Windows Media 音訊</comment>
-    <sub-class-of type="video/x-ms-asf"/>
+    <sub-class-of type="application/vnd.ms-asf"/>
     <glob pattern="*.wma"/>
     <alias type="audio/wma"/>
   </mime-type>
@@ -20170,6 +20284,9 @@
     <comment xml:lang="vi">Âm thanh RIFF</comment>
     <comment xml:lang="zh_CN">RIFF 音频</comment>
     <comment xml:lang="zh_TW">RIFF 音訊</comment>
+  </mime-type>
+  <mime-type type="application/x-riff">
+    <comment>RIFF container</comment>
     
     <magic priority="45">
       <match value="RIFF" type="string" offset="0"/>
@@ -21083,16 +21200,17 @@
     <comment xml:lang="zh_TW">JPEG-2000 影像</comment>
     <alias type="image/jpeg2000"/>
     <alias type="image/jpx"/>
+    <alias type="image/jpeg2000-image"/>
+    <alias type="image/x-jpeg2000-image"/>
     <magic priority="50">
-      <match value="jP" type="string" offset="4"/>
       <match value="\xFF\x4F\xFF\x51\x00" type="string" offset="0"/>
       <match value="0x0c6a5020" type="big32" offset="3"/>
+      <match value="jp2" type="string" offset="20"/>
     </magic>
     <glob pattern="*.jp2"/>
-    <glob pattern="*.jpc"/>
     <glob pattern="*.jpx"/>
-    <glob pattern="*.j2k"/>
     <glob pattern="*.jpf"/>
+
   </mime-type>
   <mime-type type="image/openraster">
     <comment>OpenRaster archiving image</comment>
@@ -22344,7 +22462,7 @@
         <match value="CgBI" type="string" offset="12"/>
       </match>
     </magic>
-    <glob pattern="*.png"/>
+    <glob weight="10" pattern="*.png"/>
   </mime-type>
   <mime-type type="image/rle">
     <comment>Run Length Encoded bitmap image</comment>
@@ -22698,6 +22816,15 @@
     <magic priority="50">
       <match value="\x45\x50\x2A\x00" type="string" offset="0"/>
     </magic>
+  </mime-type>
+  <mime-type type="image/webp">
+    <comment>WebP image</comment>
+    <magic priority="50">
+      <match value="RIFF" type="string" offset="0">
+        <match value="WEBP" type="string" offset="8"/>
+      </match>
+    </magic>
+    <glob pattern="*.webp"/>
   </mime-type>
   <mime-type type="image/x-3ds">
     <comment>3D Studio image</comment>
@@ -24307,7 +24434,12 @@
       <match value="8BPS  \000\000\000\000" type="string" offset="0" mask="0xffffffff0000ffffffff"/>
     </magic>
     <glob pattern="*.psd"/>
+    <alias type="image/psd"/>
     <alias type="image/x-psd"/>
+    <alias type="image/photoshop"/>
+    <alias type="image/x-photoshop"/>
+    <alias type="application/photoshop"/>
+    <alias type="application/x-photoshop"/>
   </mime-type>
   <mime-type type="image/x-rgb">
     <comment>RGB image</comment>
@@ -26337,9 +26469,8 @@
     <comment xml:lang="zh_TW">CSS 樣式表</comment>
     <acronym>CSS</acronym>
     <expanded-acronym>Cascading Style Sheets</expanded-acronym>
-    <sub-class-of type="text/x-csrc"/>
+    <sub-class-of type="text/plain"/>
     <glob pattern="*.css"/>
-    <glob pattern="*.CSSL"/>
   </mime-type>
   <mime-type type="text/vcard">
     <comment>electronic business card</comment>
@@ -29973,9 +30104,10 @@
       <match value="#!/usr/local/bin/python" type="string" offset="0"/>
       <match value="#! /usr/local/bin/python" type="string" offset="0"/>
       <match value='eval \"exec /usr/local/bin/python' type="string" offset="0"/>
-      <match value='/bin/env python' type="string" offset="1:16"/>
+      <match value='/bin/env python' type="string" offset="2:16"/>
     </magic>
     <glob pattern="*.py"/>
+    <glob pattern="*.pyx"/>
     <glob pattern="*.wsgi"/>
   </mime-type>
   <mime-type type="text/x-lua">
@@ -30025,8 +30157,10 @@
     <sub-class-of type='application/x-executable'/>
     <sub-class-of type="text/plain"/>
     <magic priority="50">
-      <match value="/bin/lua" type="string" offset="0"/>
-      <match value="/bin/env lua" type="string" offset="0"/>
+      <match value="/bin/lua" type="string" offset="2:16"/>
+      <match value="/bin/luajit" type="string" offset="2:16"/>
+      <match value="/bin/env lua" type="string" offset="2:16"/>
+      <match value="/bin/env luajit" type="string" offset="2:16"/>
     </magic>
     <glob pattern="*.lua"/>
   </mime-type>
@@ -30323,7 +30457,7 @@
     <sub-class-of type="text/plain"/>
     <glob pattern="*.etx"/>
   </mime-type>
-  <mime-type type="text/x-sql">
+  <mime-type type="application/sql">
     <comment>SQL code</comment>
     <comment xml:lang="ar">شفرة SQL</comment>
     <comment xml:lang="az">SQL kodu</comment>
@@ -30375,6 +30509,7 @@
     <comment xml:lang="zh_TW">SQL 代碼</comment>
     <sub-class-of type="text/plain"/>
     <glob pattern="*.sql"/>
+    <alias type="text/x-sql"/>
   </mime-type>
   <mime-type type="text/x-tcl">
     <comment>Tcl script</comment>
@@ -31914,7 +32049,7 @@
     </magic>
     <glob pattern="*.mng"/>
   </mime-type>
-  <mime-type type="video/x-ms-asf">
+  <mime-type type="application/vnd.ms-asf">
     <comment>ASF video</comment>
     <comment xml:lang="ar">ASF مرئي</comment>
     <comment xml:lang="be@latin">Videa ASF</comment>
@@ -31962,7 +32097,7 @@
     <acronym>ASF</acronym>
     <expanded-acronym>Advanced Streaming Format</expanded-acronym>
     <alias type="video/x-ms-wm"/>
-    <alias type="application/vnd.ms-asf"/>
+    <alias type="video/x-ms-asf"/>
     <glob pattern="*.asf"/>
     <magic priority="50">
       <match value="0x3026b275" type="big32" offset="0"/>
@@ -32012,7 +32147,7 @@
     <comment xml:lang="vi">Tập tin Windows Media Station</comment>
     <comment xml:lang="zh_CN">Windows 媒体工作站文件</comment>
     <comment xml:lang="zh_TW">Windows Media Station 檔</comment>
-    <sub-class-of type="video/x-ms-asf"/>
+    <sub-class-of type="application/vnd.ms-asf"/>
     <generic-icon name="video-x-generic"/>
     <glob pattern="*.nsc"/>
     <magic priority="50">
@@ -32062,7 +32197,7 @@
     <comment xml:lang="vi">Ảnh động Windows Media</comment>
     <comment xml:lang="zh_CN">Windows Media 视频</comment>
     <comment xml:lang="zh_TW">Windows Media 視訊</comment>
-    <sub-class-of type="video/x-ms-asf"/>
+    <sub-class-of type="application/vnd.ms-asf"/>
     <glob pattern="*.wmv"/>
   </mime-type>
   <mime-type type="video/x-msvideo">
@@ -33696,6 +33831,10 @@
     <comment xml:lang="uk">пристрій для читання електронних книг</comment>
     <comment xml:lang="zh_CN">电子书阅读器</comment>
     <comment xml:lang="zh_TW">e-book 閱讀器</comment>
+    <treemagic>
+      <treematch type="directory" path=".kobo" non-empty="true"/>
+      <treematch path="system/com.amazon.ebook.booklet.reader" non-empty="false"/>
+    </treemagic>
   </mime-type>
 
   <mime-type type="x-content/image-picturecd">
@@ -33938,6 +34077,19 @@
     <expanded-acronym>TriG RDF Graph Triple Language</expanded-acronym>
     <sub-class-of type="text/plain"/>
     <glob pattern="*.trig"/>
+  </mime-type>
+
+  <mime-type type="application/x-iwork-keynote-sffkey">
+    <comment>Apple Keynote 5 presentation</comment>
+    <sub-class-of type="application/zip"/>
+    <generic-icon name="x-office-presentation"/>
+    <magic priority="50">
+      <match value="PK\003\004" type="string" offset="0">
+        <match value="index.apxl" type="string" offset="30"/>
+      </match>
+    </magic>
+    <glob pattern="*.key"/>
+    <alias type="application/vnd.apple.keynote"/>
   </mime-type>
 
 </mime-info>
