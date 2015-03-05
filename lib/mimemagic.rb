@@ -62,15 +62,38 @@ class MimeMagic
   end
 
   # Lookup mime type by file extension
-  def self.by_extension(ext)
+  # Option keys:
+  # * <i>:multiple</i>: Return an array with all MIME types found. Instead only the first match is returned.
+  def self.by_extension(ext, options = {})
     ext = ext.to_s.downcase
     mime = ext[0..0] == '.' ? EXTENSIONS[ext[1..-1]] : EXTENSIONS[ext]
-    mime && new(mime)
+    case mime
+    when Array
+      mime = mime.map { |e| e && new(e) }
+      options[:multiple] ? mime : mime.first
+    when String
+      options[:multiple] ? [mime] : mime && new(mime)
+    end
   end
 
   # Lookup mime type by filename
   def self.by_path(path)
     by_extension(File.extname(path))
+  end
+  
+  # Lookup mime type by path and if necessary by magic
+  def self.by_path_and_magic(path)
+    extensions = by_extension(File.extname(path), multiple: true)
+    return nil if extensions.nil?
+    if extensions.length > 1
+      # Found more than one MIME type, look up by magic to find the right match
+      extensions.each do |e|
+        return e if validate_by_magic(File.open(path, 'rb'), e)
+      end
+      return false
+    else
+      extensions.first && new(extensions.first)
+    end
   end
 
   # Lookup mime type by magic content analysis.
@@ -87,6 +110,23 @@ class MimeMagic
         MAGIC.find {|type, matches| magic_match_io(io, matches) }
       end
     mime && new(mime[0])
+  end
+  
+  # Validate MIME by magic
+  def self.validate_by_magic(io, mime)
+    magic = MAGIC.find { |type, matches| type == mime.type }
+    return false if magic.nil?
+    matches = magic[1]
+    
+    unless io.respond_to?(:seek) && io.respond_to?(:read)
+      str = io.respond_to?(:read) ? io.read : io.to_s
+      str = str.force_encoding(Encoding::BINARY) if str.respond_to? :force_encoding
+      magic_match_str(str, matches)
+    else
+      io.binmode
+      io.set_encoding(Encoding::BINARY) if io.respond_to?(:set_encoding)
+      magic_match_io(io, matches)
+    end
   end
 
   # Return type as string
