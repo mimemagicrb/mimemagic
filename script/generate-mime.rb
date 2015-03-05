@@ -82,7 +82,8 @@ magics = []
   end
   if !exts.empty?
     exts.each{|x|
-      extensions[x] = type if !extensions.include?(x)
+      extensions[x] = [] if extensions[x].nil?
+      extensions[x].push type
     }
     types[type] = [exts,subclass,comments[nil]]
   end
@@ -97,7 +98,7 @@ puts "  # @private"
 puts "  # :nodoc:"
 puts "  EXTENSIONS = {"
 extensions.keys.sort.each do |key|
-  puts "    '#{key}' => '#{extensions[key]}',"
+  puts "    '#{key}' => ['#{extensions[key].join('\',\'')}'],"
 end
 puts "  }"
 puts "  # @private"
