@@ -83,7 +83,7 @@ class MimeMagic
   
   # Lookup mime type by path and if necessary by magic
   def self.by_path_and_magic(path)
-    extensions = by_extension(File.extname(path), multiple: true)
+    extensions = by_extension(File.extname(path), :multiple => true)
     return nil if extensions.nil?
     if extensions.length > 1
       # Found more than one MIME type, look up by magic to find the right match
