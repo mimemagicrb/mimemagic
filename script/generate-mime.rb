@@ -82,7 +82,7 @@ magics = []
   end
   if !exts.empty?
     exts.each{|x|
-      extensions[x] = [] if extensions[x].nil?
+      extensions[x] = [] unless extensions.include?(x)
       extensions[x].push type
     }
     types[type] = [exts,subclass,comments[nil]]
