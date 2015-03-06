@@ -25,7 +25,10 @@ class MimeMagic
     TYPES[type] = [extensions,
                   [options[:parents]].flatten.compact,
                   options[:comment]]
-    extensions.each {|ext| EXTENSIONS[ext] = type }
+    extensions.each do |ext|
+      EXTENSIONS[ext] = [] unless EXTENSIONS.include?(ext)
+      EXTENSIONS[ext].push type
+    end
     MAGIC.unshift [type, options[:magic]] if options[:magic]
   end
 
@@ -67,13 +70,9 @@ class MimeMagic
   def self.by_extension(ext, options = {})
     ext = ext.to_s.downcase
     mime = ext[0..0] == '.' ? EXTENSIONS[ext[1..-1]] : EXTENSIONS[ext]
-    case mime
-    when Array
-      mime = mime.map { |e| e && new(e) }
-      options[:multiple] ? mime : mime.first
-    when String
-      options[:multiple] ? [mime] : mime && new(mime)
-    end
+    mime = [] if mime.nil?
+    mime = mime.map { |e| e && new(e) }
+    options[:multiple] ? mime : mime.first
   end
 
   # Lookup mime type by filename
