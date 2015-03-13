@@ -1422,7 +1422,7 @@ class MimeMagic
   }
   # @private
   # :nodoc:
-  MAGIC = [
+  AUTO_MAGIC = [
     ['application/vnd.stardivision.writer', [[2089, 'StarWriter']]],
     ['application/x-docbook+xml', [[0, '<?xml', [[0..100, '-//OASIS//DTD DocBook XML'], [0..100, '-//KDE//DTD DocBook XML']]]]],
     ['image/x-eps', [[0, '%!', [[15, 'EPS']]], [0, "\004%!", [[16, 'EPS']]], [0, "\305\320\323\306"]]],

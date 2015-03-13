@@ -112,7 +112,7 @@ end
 puts "  }"
 puts "  # @private"
 puts "  # :nodoc:"
-puts "  MAGIC = ["
+puts "  AUTO_MAGIC = ["
 magics.each do |priority, type, matches|
   puts "    ['#{type}', #{matches.inspect}],"
 end

@@ -1,5 +1,6 @@
 require 'mimemagic/tables'
 require 'mimemagic/version'
+require 'mimemagic/extra_magic'
 
 # Mime type detection
 class MimeMagic
