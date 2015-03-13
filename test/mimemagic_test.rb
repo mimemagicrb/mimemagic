@@ -50,9 +50,16 @@ describe 'MimeMagic' do
     MimeMagic.by_path('').should.equal nil
   end
 
+  it 'should recognize xlsx as zip without magic' do
+    file = "test/files/application.vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    MimeMagic.by_magic(File.read(file)).should.equal "application/zip"
+    MimeMagic.by_magic(File.open(file, 'rb')).should.equal "application/zip"
+  end
+
   it 'should recognize by magic' do
+    require "mimemagic/overlay"
     Dir['test/files/*'].each do |file|
-      mime = file[11..-1].gsub('.', '/')
+      mime = file[11..-1].sub('.', '/')
       MimeMagic.by_magic(File.read(file)).should.equal mime
       MimeMagic.by_magic(File.open(file, 'rb')).should.equal mime
     end
