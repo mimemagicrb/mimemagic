@@ -76,6 +76,10 @@ describe 'MimeMagic' do
     MimeMagic.new('application/mimemagic-test').extensions.should.equal %w(ext1 ext2)
     MimeMagic.new('application/mimemagic-test').should.be.child_of 'text/plain'
   end
+  
+  it 'should return an array if multiple option is enabled' do
+    MimeMagic.by_extension('.html', :multiple => true).should.equal ['text/html']
+  end
 
   it 'should process magic' do
     MimeMagic.add('application/mimemagic-test',
