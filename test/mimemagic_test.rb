@@ -67,9 +67,9 @@ describe 'MimeMagic' do
 
   it 'should have add' do
     MimeMagic.add('application/mimemagic-test',
-                  :extensions => %w(ext1 ext2),
-                  :parents => 'application/xml',
-                  :comment => 'Comment')
+                  extensions: %w(ext1 ext2),
+                  parents: 'application/xml',
+                  comment: 'Comment')
     MimeMagic.by_extension('ext1').should.equal 'application/mimemagic-test'
     MimeMagic.by_extension('ext2').should.equal 'application/mimemagic-test'
     MimeMagic.by_extension('ext2').comment.should.equal 'Comment'
@@ -79,7 +79,7 @@ describe 'MimeMagic' do
 
   it 'should process magic' do
     MimeMagic.add('application/mimemagic-test',
-                  :magic => [[0, 'MAGICTEST'], # MAGICTEST at position 0
+                  magic: [[0, 'MAGICTEST'], # MAGICTEST at position 0
                              [1, 'MAGICTEST'], # MAGICTEST at position 1
                              [9..12, 'MAGICTEST'], # MAGICTEST starting at position 9 to 12
                              [2, 'MAGICTEST', [[0, 'X'], [0, 'Y']]]]) # MAGICTEST at position 2 and (X at 0 or Y at 0)
@@ -108,7 +108,7 @@ describe 'MimeMagic' do
   end
 
   it 'should handle different file objects' do
-    MimeMagic.add('application/mimemagic-test', :magic => [[0, 'MAGICTEST']])
+    MimeMagic.add('application/mimemagic-test', magic: [[0, 'MAGICTEST']])
     class ReadableObj
       def read
         'MAGICTEST'
