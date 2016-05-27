@@ -65,6 +65,13 @@ describe 'MimeMagic' do
     end
   end
 
+  it 'should recognize all by magic' do
+    require 'mimemagic/overlay'
+    file = 'test/files/application.vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    mimes = %w[application/vnd.openxmlformats-officedocument.spreadsheetml.sheet application/zip]
+    MimeMagic.all_by_magic(File.read(file)).map(&:type).should.equal mimes
+  end
+
   it 'should have add' do
     MimeMagic.add('application/mimemagic-test',
                   extensions: %w(ext1 ext2),
