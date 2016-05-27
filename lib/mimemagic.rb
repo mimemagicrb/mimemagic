@@ -107,16 +107,15 @@ class MimeMagic
   end
 
   def self.magic_match(io, method)
-    mime_or_mimes = if io.respond_to?(:seek) && io.respond_to?(:read)
-                      io.binmode
-                      io.set_encoding(Encoding::BINARY) if io.respond_to?(:set_encoding)
-                      MAGIC.send(method) { |type, matches| magic_match_io(io, matches) }
-                    else
-                      str = io.respond_to?(:read) ? io.read : io.to_s
-                      str = str.force_encoding(Encoding::BINARY) if str.respond_to?(:force_encoding)
-                      MAGIC.send(method) { |type, matches| magic_match_str(str, matches) }
-                    end
-    method == :find ? [mime_or_mimes] : mime_or_mimes
+    if io.respond_to?(:seek) && io.respond_to?(:read)
+      io.binmode
+      io.set_encoding(Encoding::BINARY) if io.respond_to?(:set_encoding)
+      MAGIC.send(method) { |type, matches| magic_match_io(io, matches) }
+    else
+      str = io.respond_to?(:read) ? io.read : io.to_s
+      str = str.force_encoding(Encoding::BINARY) if str.respond_to?(:force_encoding)
+      MAGIC.send(method) { |type, matches| magic_match_str(str, matches) }
+    end
   end
 
   def self.magic_match_io(io, matches)
