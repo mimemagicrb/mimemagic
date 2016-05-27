@@ -76,17 +76,14 @@ class MimeMagic
   # Lookup mime type by magic content analysis.
   # This is a slow operation.
   def self.by_magic(io)
-    mime =
-      unless io.respond_to?(:seek) && io.respond_to?(:read)
-        str = io.respond_to?(:read) ? io.read : io.to_s
-        str = str.force_encoding(Encoding::BINARY) if str.respond_to? :force_encoding
-        MAGIC.find {|type, matches| magic_match_str(str, matches) }
-      else
-        io.binmode
-        io.set_encoding(Encoding::BINARY) if io.respond_to?(:set_encoding)
-        MAGIC.find {|type, matches| magic_match_io(io, matches) }
-      end
+    mime = magic_match(io, :find)
     mime && new(mime[0])
+  end
+
+  # Lookup all mime types by magic content analysis.
+  # This is a slower operation.
+  def self.all_by_magic(io)
+    magic_match(io, :select).map { |mime| new(mime[0]) }
   end
 
   # Return type as string
@@ -107,6 +104,18 @@ class MimeMagic
 
   def self.child?(child, parent)
     child == parent || TYPES.key?(child) && TYPES[child][1].any? {|p| child?(p, parent) }
+  end
+
+  def self.magic_match(io, method)
+    if io.respond_to?(:seek) && io.respond_to?(:read)
+      io.binmode
+      io.set_encoding(Encoding::BINARY) if io.respond_to?(:set_encoding)
+      MAGIC.send(method) { |type, matches| magic_match_io(io, matches) }
+    else
+      str = io.respond_to?(:read) ? io.read : io.to_s
+      str = str.force_encoding(Encoding::BINARY) if str.respond_to?(:force_encoding)
+      MAGIC.send(method) { |type, matches| magic_match_str(str, matches) }
+    end
   end
 
   def self.magic_match_io(io, matches)
@@ -137,5 +146,5 @@ class MimeMagic
     end
   end
 
-  private_class_method :magic_match_io, :magic_match_str
+  private_class_method :magic_match, :magic_match_io, :magic_match_str
 end
