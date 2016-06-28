@@ -2711,7 +2711,7 @@
     <comment xml:lang="zh_CN">Microsoft CAB 归档文件</comment>
     <comment xml:lang="zh_TW">微軟 Cabinet 封存檔</comment>
     <generic-icon name="package-x-generic"/>
-    <magic priority="50">
+    <magic priority="60">
       <match value="MSCF\0\0\0\0" type="string" offset="0"/>
     </magic>
     <glob pattern="*.cab"/>
@@ -6267,7 +6267,7 @@
     <comment xml:lang="zh_CN">7-zip 归档文件</comment>
     <comment xml:lang="zh_TW">7-zip 封存檔</comment>
     <generic-icon name="package-x-generic"/>
-    <magic priority="50">
+    <magic priority="60">
       <match value="7z\274\257\047\034" type="string" offset="0"/>
     </magic>
     <glob pattern="*.7z"/>
@@ -6657,7 +6657,7 @@
     <comment xml:lang="zh_CN">ARC 归档文件</comment>
     <comment xml:lang="zh_TW">ARC 封存檔</comment>
     <generic-icon name="package-x-generic"/>
-    <magic priority="50">
+    <magic priority="60">
       <match value="0x0000081a" type="little32" offset="0" mask="0x8080ffff"/>
       <match value="0x0000091a" type="little32" offset="0" mask="0x8080ffff"/>
       <match value="0x0000021a" type="little32" offset="0" mask="0x8080ffff"/>
@@ -7574,7 +7574,7 @@
     <comment xml:lang="zh_CN">Lrzip 归档文件</comment>
     <comment xml:lang="zh_TW">Lrzip 封存檔</comment>
     <generic-icon name="package-x-generic"/>
-    <magic priority="50">
+    <magic priority="60">
       <match value="LRZI" type="string" offset="0"/>
     </magic>
     <glob pattern="*.lrz"/>
@@ -8226,7 +8226,7 @@
     <comment xml:lang="zh_CN">CPIO 归档文件</comment>
     <comment xml:lang="zh_TW">CPIO 封存檔</comment>
     <generic-icon name="package-x-generic"/>
-    <magic priority="50">
+    <magic priority="60">
       <match value="070707" type="host16" offset="0"/>
       <match value="070701" type="string" offset="0"/>
       <match value="070702" type="string" offset="0"/>
@@ -11724,7 +11724,7 @@
     <comment xml:lang="zh_CN">Pack200 Java 归档文件</comment>
     <comment xml:lang="zh_TW">Pack200 Java 封存檔</comment>
     <generic-icon name="package-x-generic"/>
-    <magic priority="50">
+    <magic priority="60">
       <match value="0xcafed00d" type="big32" offset="0"/>
     </magic>
     <glob pattern="*.pack"/>
@@ -13031,7 +13031,7 @@
     <comment xml:lang="zh_CN">LHA 归档文件</comment>
     <comment xml:lang="zh_TW">LHA 封存檔</comment>
     <generic-icon name="package-x-generic"/>
-    <magic priority="50">
+    <magic priority="60">
       <match value="-lh -" type="string" offset="2"/>
       <match value="-lh0-" type="string" offset="2"/>
       <match value="-lh1-" type="string" offset="2"/>
@@ -13245,7 +13245,7 @@
     <comment xml:lang="zh_CN">LZ4 归档文件</comment>
     <comment xml:lang="zh_TW">LZ4 封存檔</comment>
     <generic-icon name="package-x-generic"/>
-    <magic priority="50">
+    <magic priority="60">
       <match value="0x184d2204" type="little32" offset="0"/>
       <match value="0x184c2102" type="little32" offset="0"/>
     </magic>
@@ -13294,7 +13294,7 @@
     <comment xml:lang="zh_CN">Lzip 归档文件</comment>
     <comment xml:lang="zh_TW">Lzip 封存檔</comment>
     <generic-icon name="package-x-generic"/>
-    <magic priority="50">
+    <magic priority="60">
       <match value="LZIP" type="string" offset="0"/>
     </magic>
     <glob pattern="*.lz"/>
@@ -13454,7 +13454,7 @@
     <acronym>LZO</acronym>
     <expanded-acronym>Lempel-Ziv-Oberhumer</expanded-acronym>
     <generic-icon name="package-x-generic"/>
-    <magic priority="50">
+    <magic priority="60">
       <match value="\x89\x4c\x5a\x4f\x00\x0d\x0a\x1a\x0a" type="string" offset="0"/>
     </magic>
     <glob pattern="*.lzo"/>
@@ -13490,10 +13490,22 @@
     <comment xml:lang="zh_CN">Qpress 归档文件</comment>
     <comment xml:lang="zh_TW">Qpress 封存檔</comment>
     <generic-icon name="package-x-generic"/>
-    <magic priority="50">
+    <magic priority="60">
       <match value="qpress10" type="string" offset="0"/>
     </magic>
     <glob pattern="*.qp"/>
+  </mime-type>
+  <mime-type type="application/x-xar">
+    <comment>XAR archive</comment>
+    <acronym>XAR</acronym>
+    <expanded-acronym>eXtensible ARchive</expanded-acronym>
+    <generic-icon name="package-x-generic"/>
+    <magic priority="60">
+      <match value="0x78617221" type="big32" offset="0"/>
+    </magic>
+    <glob pattern="*.xar"/>
+    
+    <glob pattern="*.pkg"/>
   </mime-type>
   <mime-type type="application/zlib">
     <comment>Zlib archive</comment>
@@ -15919,7 +15931,7 @@
     <acronym>Parchive</acronym>
     <expanded-acronym>Parity Volume Set Archive</expanded-acronym>
     <generic-icon name="package-x-generic"/>
-    <magic priority="50">
+    <magic priority="60">
       <match value="PAR2" type="string" offset="0"/>
     </magic>
     <glob pattern="*.PAR2"/>
@@ -16730,7 +16742,7 @@
     <expanded-acronym>Roshal ARchive</expanded-acronym>
     <alias type="application/x-rar-compressed"/>
     <generic-icon name="package-x-generic"/>
-    <magic priority="50">
+    <magic priority="60">
       <match value="Rar!" type="string" offset="0"/>
     </magic>
     <glob pattern="*.rar"/>
@@ -17825,7 +17837,7 @@
     <generic-icon name="package-x-generic"/>
     <alias type="application/stuffit"/>
     <alias type="application/x-sit"/>
-    <magic priority="50">
+    <magic priority="60">
       <match value="StuffIt " type="string" offset="0"/>
       <match value="SIT!" type="string" offset="0"/>
     </magic>
@@ -18593,7 +18605,7 @@
     <comment xml:lang="zh_TW">Tar 封存檔</comment>
     <generic-icon name="package-x-generic"/>
     <alias type="application/x-gtar"/>
-    <magic priority="50">
+    <magic priority="60">
       <match value="ustar\0" type="string" offset="257"/>
       <match value="ustar\040\040\0" type="string" offset="257"/>
     </magic>
@@ -19190,7 +19202,7 @@
     <comment xml:lang="zh_CN">XZ 归档文件</comment>
     <comment xml:lang="zh_TW">XZ 封存檔</comment>
     <generic-icon name="package-x-generic"/>
-    <magic priority="50">
+    <magic priority="60">
       <match value="\xfd\x37\x7a\x58\x5a\x00" type="string" offset="0"/>
     </magic>
     <glob pattern="*.xz"/>
@@ -19594,7 +19606,7 @@
     <comment xml:lang="zh_CN">Zoo 归档文件</comment>
     <comment xml:lang="zh_TW">Zoo 封存檔</comment>
     <generic-icon name="package-x-generic"/>
-    <magic priority="50">
+    <magic priority="60">
       <match value="0xfdc4a7dc" type="little32" offset="20"/>
     </magic>
     <glob pattern="*.zoo"/>
@@ -19653,6 +19665,13 @@
     <sub-class-of type="application/xml"/>
     <generic-icon name="text-html"/>
     <glob pattern="*.xhtml"/>
+    <glob pattern="*.xht"/>
+    <magic priority="60">
+      <match value="//W3C//DTD XHTML " type="string" offset="0:256"/>
+      <match value="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" type="string" offset="0:256"/>
+      <match value="&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml" type="string" offset="0:256"/>
+      <match value="&lt;HTML xmlns=&quot;http://www.w3.org/1999/xhtml" type="string" offset="0:256"/>
+    </magic>
     <root-XML namespaceURI='http://www.w3.org/1999/xhtml' localName='html'/>
   </mime-type>
   <mime-type type="application/zip">
@@ -29666,7 +29685,7 @@
     <comment xml:lang="zh_CN">ACE 归档文件</comment>
     <comment xml:lang="zh_TW">ACE 封存檔</comment>
     <generic-icon name="package-x-generic"/>
-    <magic priority="50">
+    <magic priority="60">
       <match value="**ACE**" type="string" offset="7"/>
     </magic>
     <glob pattern="*.ace"/>
@@ -34995,6 +35014,19 @@
     <sub-class-of type="application/zip"/>
     <glob pattern="*.kmz"/>
   </mime-type>
+  <mime-type type="application/vnd.geo+json">
+    <comment>GeoJSON geospatial data</comment>
+    <sub-class-of type="application/json"/>
+    <glob pattern="*.geojson"/>
+    <glob pattern="*.geo.json"/>
+  </mime-type>
+  <mime-type type="application/gpx+xml">
+    <comment>GPX geographic data</comment>
+    <acronym>GPX</acronym>
+    <expanded-acronym>GPS Exchange Format</expanded-acronym>
+    <sub-class-of type="application/xml"/>
+    <glob pattern="*.gpx"/>
+  </mime-type>
   <mime-type type="application/x-ica">
     <comment>Citrix ICA settings file</comment>
     <comment xml:lang="ar">ملف إعدادات Citrix ICA</comment>
@@ -36806,6 +36838,14 @@
       <match value="DOS\x00" type="string" offset="0"/>
     </magic>
     <glob pattern="*.adf"/>
+  </mime-type>
+
+  <mime-type type="application/vnd.xdgapp">
+    <comment>XDG application bundle</comment>
+    <magic priority="50">
+      <match value="xdg-app\x00\x01\x00\x89\xe5" type="string" offset="0"/>
+    </magic>
+    <glob pattern="*.xdgapp"/>
   </mime-type>
 
 </mime-info>
