@@ -1,6 +1,8 @@
 require 'mimemagic/tables'
 require 'mimemagic/version'
 
+require 'stringio'
+
 # Mime type detection
 class MimeMagic
   attr_reader :type, :mediatype, :subtype
@@ -113,8 +115,7 @@ class MimeMagic
       MAGIC.send(method) { |type, matches| magic_match_io(io, matches) }
     else
       str = io.respond_to?(:read) ? io.read : io.to_s
-      str = str.force_encoding(Encoding::BINARY) if str.respond_to?(:force_encoding)
-      MAGIC.send(method) { |type, matches| magic_match_str(str, matches) }
+      magic_match(StringIO.new(str), method)
     end
   end
 
@@ -133,18 +134,5 @@ class MimeMagic
     end
   end
 
-  def self.magic_match_str(str, matches)
-    matches.any? do |offset, value, children|
-      match =
-        if Range === offset
-          x = str[offset.begin, offset.end - offset.begin + value.bytesize]
-          x && x.include?(value)
-        else
-          str[offset, value.bytesize] == value
-        end
-      match && (!children || magic_match_str(str, children))
-    end
-  end
-
-  private_class_method :magic_match, :magic_match_io, :magic_match_str
+  private_class_method :magic_match, :magic_match_io
 end
