@@ -112,25 +112,26 @@ class MimeMagic
     if io.respond_to?(:seek) && io.respond_to?(:read)
       io.binmode
       io.set_encoding(Encoding::BINARY) if io.respond_to?(:set_encoding)
-      MAGIC.send(method) { |type, matches| magic_match_io(io, matches) }
+      buffer = "".force_encoding(Encoding::BINARY)
+      MAGIC.send(method) { |type, matches| magic_match_io(io, matches, buffer) }
     else
       str = io.respond_to?(:read) ? io.read : io.to_s
       magic_match(StringIO.new(str), method)
     end
   end
 
-  def self.magic_match_io(io, matches)
+  def self.magic_match_io(io, matches, buffer)
     matches.any? do |offset, value, children|
       match =
         if Range === offset
           io.seek(offset.begin)
-          x = io.read(offset.end - offset.begin + value.bytesize)
+          x = io.read(offset.end - offset.begin + value.bytesize, buffer)
           x && x.include?(value)
         else
           io.seek(offset)
-          io.read(value.bytesize) == value
+          io.read(value.bytesize, buffer) == value
         end
-      match && (!children || magic_match_io(io, children))
+      match && (!children || magic_match_io(io, children, buffer))
     end
   end
 
