@@ -1,6 +1,8 @@
 require 'mimemagic/tables'
 require 'mimemagic/version'
 
+require 'stringio'
+
 # Mime type detection
 class MimeMagic
   attr_reader :type, :mediatype, :subtype
@@ -110,41 +112,28 @@ class MimeMagic
     if io.respond_to?(:seek) && io.respond_to?(:read)
       io.binmode
       io.set_encoding(Encoding::BINARY) if io.respond_to?(:set_encoding)
-      MAGIC.send(method) { |type, matches| magic_match_io(io, matches) }
+      buffer = "".force_encoding(Encoding::BINARY)
+      MAGIC.send(method) { |type, matches| magic_match_io(io, matches, buffer) }
     else
       str = io.respond_to?(:read) ? io.read : io.to_s
-      str = str.force_encoding(Encoding::BINARY) if str.respond_to?(:force_encoding)
-      MAGIC.send(method) { |type, matches| magic_match_str(str, matches) }
+      magic_match(StringIO.new(str), method)
     end
   end
 
-  def self.magic_match_io(io, matches)
+  def self.magic_match_io(io, matches, buffer)
     matches.any? do |offset, value, children|
       match =
         if Range === offset
           io.seek(offset.begin)
-          x = io.read(offset.end - offset.begin + value.bytesize)
+          x = io.read(offset.end - offset.begin + value.bytesize, buffer)
           x && x.include?(value)
         else
           io.seek(offset)
-          io.read(value.bytesize) == value
+          io.read(value.bytesize, buffer) == value
         end
-      match && (!children || magic_match_io(io, children))
+      match && (!children || magic_match_io(io, children, buffer))
     end
   end
 
-  def self.magic_match_str(str, matches)
-    matches.any? do |offset, value, children|
-      match =
-        if Range === offset
-          x = str[offset.begin, offset.end - offset.begin + value.bytesize]
-          x && x.include?(value)
-        else
-          str[offset, value.bytesize] == value
-        end
-      match && (!children || magic_match_str(str, children))
-    end
-  end
-
-  private_class_method :magic_match, :magic_match_io, :magic_match_str
+  private_class_method :magic_match, :magic_match_io
 end

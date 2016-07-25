@@ -90,6 +90,48 @@ end
 
 magics = magics.sort {|a,b| [-a[0],a[1]] <=> [-b[0],b[1]] }
 
+common_types = [
+  "image/jpeg",                                                              # .jpg
+  "image/png",                                                               # .png
+  "image/gif",                                                               # .gif
+  "image/tiff",                                                              # .tiff
+  "image/bmp",                                                               # .bmp
+  "image/vnd.adobe.photoshop",                                               # .psd
+  "image/webp",                                                              # .webp
+  "image/svg+xml",                                                           # .svg
+
+  "video/x-msvideo",                                                         # .avi
+  "video/x-ms-wmv",                                                          # .wmv
+  "video/mp4",                                                               # .mp4, .m4v
+  "video/quicktime",                                                         # .mov
+  "video/mpeg",                                                              # .mpeg
+  "video/ogg",                                                               # .ogv
+  "video/webm",                                                              # .webm
+  "video/x-matroska",                                                        # .mkv
+  "video/x-flv",                                                             # .flv
+
+  "audio/mpeg",                                                              # .mp3
+  "audio/x-wav",                                                             # .wav
+  "audio/aac",                                                               # .aac
+  "audio/flac",                                                              # .flac
+  "audio/mp4",                                                               # .m4a
+  "audio/ogg",                                                               # .ogg
+
+  "application/pdf",                                                         # .pdf
+  "application/msword",                                                      # .doc
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document", # .docx
+  "application/vnd.ms-powerpoint",                                           # .pps
+  "application/vnd.openxmlformats-officedocument.presentationml.slideshow",  # .ppsx
+  "application/vnd.ms-excel",                                                # .pps
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",       # .ppsx
+]
+
+common_magics = common_types.map do |common_type|
+  magics.find { |_, type, _| type == common_type }
+end
+
+magics = (common_magics.compact + magics).uniq
+
 puts "# -*- coding: binary -*-"
 puts "# Generated from #{FILE}"
 puts "class MimeMagic"
