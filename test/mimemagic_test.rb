@@ -1,6 +1,7 @@
 require 'bacon'
 require 'mimemagic'
 require 'stringio'
+require 'forwardable'
 
 describe 'MimeMagic' do
   it 'should have type, mediatype and subtype' do
@@ -116,12 +117,15 @@ describe 'MimeMagic' do
 
   it 'should handle different file objects' do
     MimeMagic.add('application/mimemagic-test', magic: [[0, 'MAGICTEST']])
-    class ReadableObj
-      def read
-        'MAGICTEST'
+    class IOObject
+      def initialize
+        @io = StringIO.new('MAGICTEST')
       end
+
+      extend Forwardable
+      delegate [:read, :size, :rewind, :eof?, :close] => :@io
     end
-    MimeMagic.by_magic(ReadableObj.new).should.equal 'application/mimemagic-test'
+    MimeMagic.by_magic(IOObject.new).should.equal 'application/mimemagic-test'
     class StringableObject
       def to_s
         'MAGICTEST'
