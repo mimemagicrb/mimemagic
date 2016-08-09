@@ -57,6 +57,12 @@ describe 'MimeMagic' do
     MimeMagic.by_magic(File.open(file, 'rb')).should.equal "application/zip"
   end
 
+  it 'should recognize docx as zip without magic' do
+    file = "test/files/application.vnd.openxmlformats-officedocument.wordprocessingml.document"
+    MimeMagic.by_magic(File.read(file)).should.equal "application/zip"
+    MimeMagic.by_magic(File.open(file, 'rb')).should.equal "application/zip"
+  end
+
   it 'should recognize by magic' do
     require "mimemagic/overlay"
     Dir['test/files/*'].each do |file|
