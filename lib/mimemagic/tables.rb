@@ -1503,7 +1503,7 @@ class MimeMagic
     ['image/gif', [[0, 'GIF8']]],
     ['image/tiff', [[0, "MM\000*"], [0, "II*\000"]]],
     ['image/bmp', [[0, 'BM', [[14, "\f"], [14, '@'], [14, '(']]]]],
-    ['image/vnd.adobe.photoshop', []],
+    ['image/vnd.adobe.photoshop', [[0, '8BPS']]],
     ['image/webp', [[0, 'RIFF', [[8, 'WEBP']]]]],
     ['image/svg+xml', [[0..256, '<!DOCTYPE svg'], [0..256, '<svg']]],
     ['video/x-msvideo', [[0, 'RIFF', [[8, 'AVI ']]], [0, 'AVF0', [[8, 'AVI ']]]]],
