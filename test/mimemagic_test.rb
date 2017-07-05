@@ -52,15 +52,17 @@ describe 'MimeMagic' do
   end
 
   it 'should recognize xlsx as zip without magic' do
-    file = "test/files/application.vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    MimeMagic.by_magic(File.read(file)).should.equal "application/zip"
-    MimeMagic.by_magic(File.open(file, 'rb')).should.equal "application/zip"
+    %w(msoffice rubyxl gdocs).each do |variant|
+      file = "test/files/application.vnd.openxmlformats-officedocument.spreadsheetml{#{variant}}.sheet"
+      MimeMagic.by_magic(File.read(file)).should.equal "application/zip"
+      MimeMagic.by_magic(File.open(file, 'rb')).should.equal "application/zip"
+    end
   end
 
   it 'should recognize by magic' do
     require "mimemagic/overlay"
     Dir['test/files/*'].each do |file|
-      mime = file[11..-1].sub('.', '/')
+      mime = file[11..-1].sub('.', '/').sub(/\{\w+\}/, '')
       MimeMagic.by_magic(File.read(file)).should.equal mime
       MimeMagic.by_magic(File.open(file, 'rb')).should.equal mime
     end
@@ -68,9 +70,11 @@ describe 'MimeMagic' do
 
   it 'should recognize all by magic' do
     require 'mimemagic/overlay'
-    file = 'test/files/application.vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    mimes = %w[application/vnd.openxmlformats-officedocument.spreadsheetml.sheet application/zip]
-    MimeMagic.all_by_magic(File.read(file)).map(&:type).should.equal mimes
+    %w(msoffice rubyxl gdocs).each do |variant|
+      file = "test/files/application.vnd.openxmlformats-officedocument.spreadsheetml{#{variant}}.sheet"
+      mimes = %w[application/vnd.openxmlformats-officedocument.spreadsheetml.sheet application/zip]
+      MimeMagic.all_by_magic(File.read(file)).map(&:type).should.equal mimes
+    end
   end
 
   it 'should have add' do
