@@ -1507,7 +1507,7 @@ class MimeMagic
     ['image/webp', [[0, 'RIFF', [[8, 'WEBP']]]]],
     ['image/svg+xml', [[0..256, '<!DOCTYPE svg'], [0..256, '<svg']]],
     ['video/x-msvideo', [[0, 'RIFF', [[8, 'AVI ']]], [0, 'AVF0', [[8, 'AVI ']]]]],
-    ['video/mp4', [[4, 'ftypisom'], [4, 'ftypmp42'], [4, 'ftypMSNV'], [4, 'ftypM4V '], [4, 'ftypf4v ']]],
+    ['video/mp4', [[4, 'ftypisom'], [4, 'ftypmp41'], [4, 'ftypmp42'], [4, 'ftypMSNV'], [4, 'ftypM4V '], [4, 'ftypf4v ']]],
     ['video/quicktime', [[12, 'mdat'], [4, 'mdat'], [4, 'moov'], [4, 'ftypqt']]],
     ['video/mpeg', [[0, "G?\377\020"], [0, "\000\000\001\263"], [0, "\000\000\001\272"]]],
     ['video/ogg', [[0, 'OggS']]],
