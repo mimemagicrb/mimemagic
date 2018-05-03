@@ -1,8 +1,11 @@
+require 'rake/testtask'
+
 task :default => %w(test)
 
-desc 'Run tests with bacon'
-task :test => FileList['test/*_test.rb'] do |t|
-  sh "bacon -q -Ilib:test #{t.prerequisites.join(' ')}"
+desc 'Run tests with minitest'
+Rake::TestTask.new do |t|
+  t.libs << 'test'
+  t.pattern = 'test/*_test.rb'
 end
 
 desc 'Generate mime tables'
