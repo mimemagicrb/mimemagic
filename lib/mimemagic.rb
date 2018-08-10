@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'mimemagic/tables'
 require 'mimemagic/version'
 
@@ -113,7 +115,7 @@ class MimeMagic
 
     io.binmode if io.respond_to?(:binmode)
     io.set_encoding(Encoding::BINARY) if io.respond_to?(:set_encoding)
-    buffer = "".force_encoding(Encoding::BINARY)
+    buffer = "".dup.force_encoding(Encoding::BINARY)
 
     MAGIC.send(method) { |type, matches| magic_match_io(io, matches, buffer) }
   end

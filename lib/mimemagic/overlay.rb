@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Extra magic
 
 [['application/vnd.openxmlformats-officedocument.presentationml.presentation', [[0, "PK\003\004", [[30, '[Content_Types].xml', [[0..5000, 'ppt/']]]]]]],

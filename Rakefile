@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rake/testtask'
 
 task :default => %w(test)
@@ -13,4 +15,3 @@ task :tables => 'lib/mimemagic/tables.rb'
 file 'lib/mimemagic/tables.rb' => FileList['script/freedesktop.org.xml'] do |f|
   sh "script/generate-mime.rb #{f.prerequisites.join(' ')} > #{f.name}"
 end
-

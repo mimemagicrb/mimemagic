@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'nokogiri'
 
@@ -139,24 +140,24 @@ puts "  # @private"
 puts "  # :nodoc:"
 puts "  EXTENSIONS = {"
 extensions.keys.sort.each do |key|
-  puts "    '#{key}' => '#{extensions[key]}',"
+  puts "    '#{key}' => '#{extensions[key]}'.freeze,"
 end
 puts "  }"
 puts "  # @private"
 puts "  # :nodoc:"
 puts "  TYPES = {"
 types.keys.sort.each do |key|
-  exts = types[key][0].sort.join(' ')
-  parents = types[key][1].sort.join(' ')
+  exts = types[key][0].sort.map { |ext| "'#{ext}'.freeze" }.join(',')
+  parents = types[key][1].sort.map { |parent| "'#{parent}'.freeze" }.join(',')
   comment = types[key][2].inspect
-  puts "    '#{key}' => [%w(#{exts}), %w(#{parents}), #{comment}],"
+  puts "    '#{key}' => [[#{exts}], [#{parents}], #{comment}.freeze],"
 end
 puts "  }"
 puts "  # @private"
 puts "  # :nodoc:"
 puts "  MAGIC = ["
 magics.each do |priority, type, matches|
-  puts "    ['#{type}', #{matches.inspect}],"
+  puts "    ['#{type}'.freeze, #{matches.inspect}],"
 end
 puts "  ]"
 puts "end"
