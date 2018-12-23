@@ -21,4 +21,10 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency('minitest', '~> 5.11')
   s.add_development_dependency('rake')
+
+  if s.respond_to?(:metadata)
+    s.metadata['changelog_uri'] = "https://github.com/minad/mimemagic/blob/master/CHANGELOG.md"
+    s.metadata['source_code_uri'] = "https://github.com/minad/mimemagic"
+    s.metadata['bug_tracker_uri'] = "https://github.com/minad/mimemagic/issues"
+  end
 end
