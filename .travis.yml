@@ -11,7 +11,10 @@ rvm:
   - jruby-19mode
   - rbx-3
 before_install:
-  - gem install bundler -v'< 2' # the default bundler version on travis is very old and causes 1.9.3 build issues
+  # 1. The pre-installed Bundler version on Travis is very old; causes 1.9.3 build issues
+  # 2. Bundler 2.0 is not supported by the whole matrix
+  - gem install bundler -v'< 2'
 matrix:
   allow_failures:
     - rvm: ruby-head
+    - rvm: rbx-3
