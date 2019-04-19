@@ -83,6 +83,12 @@ class TestMimeMagic < Minitest::Test
     end
   end
 
+  def test_by_magic_fail_gracefully_if_malformed_csv
+    file = 'test/malformed_files/malformed_csv.csv'
+    assert_equal '', MimeMagic.by_magic(File.read(file)).to_s
+    assert_equal '', MimeMagic.by_magic(File.open(file, 'rb')).to_s
+  end
+
   def test_recognize_all_by_magic
     load 'mimemagic/overlay.rb'
     file = 'test/files/application.vnd.openxmlformats-officedocument.spreadsheetml.sheet'

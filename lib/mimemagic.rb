@@ -1,3 +1,4 @@
+require 'csv'
 require 'mimemagic/tables'
 require 'mimemagic/version'
 
@@ -108,6 +109,17 @@ class MimeMagic
     child == parent || TYPES.key?(child) && TYPES[child][1].any? {|p| child?(p, parent) }
   end
 
+  def self.csv_check(io)
+    csv = CSV.new(io, headers: true)
+    return ['text/csv', nil] if csv.shift
+
+    nil
+  rescue CSV::MalformedCSVError
+    nil
+  ensure
+    io.close
+  end
+
   def self.magic_match(io, method)
     return magic_match(StringIO.new(io.to_s), method) unless io.respond_to?(:read)
 
@@ -115,7 +127,13 @@ class MimeMagic
     io.set_encoding(Encoding::BINARY) if io.respond_to?(:set_encoding)
     buffer = "".force_encoding(Encoding::BINARY)
 
-    MAGIC.send(method) { |type, matches| magic_match_io(io, matches, buffer) }
+    result = MAGIC.send(method) { |type, matches|
+      magic_match_io(io, matches, buffer)
+    }
+
+    return result if result
+
+    csv_check(io)
   end
 
   def self.magic_match_io(io, matches, buffer)
