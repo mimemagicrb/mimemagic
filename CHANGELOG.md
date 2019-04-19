@@ -14,6 +14,10 @@ None
 
 None
 
+## 0.3.3 (2018-12-20)
+
+Upgrade to shared-mime-info-1.10
+
 ## 0.3.2 (2016-08-02)
 
 ### Breaking Changes
@@ -28,9 +32,9 @@ None
 ### Fixed
 
 - [#40](https://github.com/minad/mimemagic/pull/40),
-  [#41](https://github.com/minad/mimemagic/pull/41) 
+  [#41](https://github.com/minad/mimemagic/pull/41)
   Performance improvements
-- [#38](https://github.com/minad/mimemagic/pull/38) 
+- [#38](https://github.com/minad/mimemagic/pull/38)
   Updated to shared-mime-info 1.6
 
 ## 0.3.1 (2016-01-04)
