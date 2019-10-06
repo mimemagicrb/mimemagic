@@ -133,6 +133,7 @@ end
 magics = (common_magics.compact + magics).uniq
 
 puts "# -*- coding: binary -*-"
+puts "# frozen_string_literal: true"
 puts "# Generated from #{FILE}"
 puts "class MimeMagic"
 puts "  # @private"
