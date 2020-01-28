@@ -14,6 +14,10 @@ None
 
 None
 
+## 0.3.4 (2020-01-28)
+
+Added frozen string literal comments
+
 ## 0.3.3 (2018-12-20)
 
 Upgrade to shared-mime-info-1.10
