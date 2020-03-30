@@ -147,7 +147,7 @@ puts "  # @private"
 puts "  # :nodoc:"
 puts "  TYPES = {"
 types.keys.sort.each do |key|
-  exts = types[key][0].sort.join(' ')
+  exts = types[key][0].join(' ')
   parents = types[key][1].sort.join(' ')
   comment = types[key][2].inspect
   puts "    '#{key}' => [%w(#{exts}), %w(#{parents}), #{comment}],"
