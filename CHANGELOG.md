@@ -14,6 +14,10 @@ None
 
 None
 
+## 0.3.5 (2020-05-04)
+
+Mimetype extensions are now ordered by freedesktop.org's priority
+
 ## 0.3.4 (2020-01-28)
 
 Added frozen string literal comments
