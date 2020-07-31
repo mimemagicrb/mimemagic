@@ -44,7 +44,7 @@ class TestMimeMagic < Minitest::Test
   end
 
   def test_have_extensions
-    assert_equal %w(html htm), MimeMagic.new('text/html').extensions
+    assert_equal ["html", "htm"].sort, MimeMagic.new('text/html').extensions.sort
   end
 
   def test_have_comment
