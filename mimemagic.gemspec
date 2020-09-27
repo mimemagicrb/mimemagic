@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.date = Date.today.to_s
   s.email = ['mail@daniel-mendler.de']
 
-  s.files         = `git ls-files`.split("\n")
+  s.files         = `git ls-files`.split("\n").reject { |f| f.match(%r{^(test|script)/}) }
   s.require_paths = %w(lib)
 
   s.summary = 'Fast mime detection by extension or content'
