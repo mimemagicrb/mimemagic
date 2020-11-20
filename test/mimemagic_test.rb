@@ -79,10 +79,12 @@ class TestMimeMagic < Minitest::Test
 
   def test_recognize_by_magic
     load "mimemagic/overlay.rb"
-    Dir['test/files/*'].each do |file|
-      mime = file[11..-1].sub('.', '/').sub(/\{\w+\}/, '')
+    Dir[ File.join("test/files/", '**', '*') ].reject { |p| File.directory? p }.each do |file|
+      mime = File.basename(file).sub('.', '/').sub(/\{\w+\}/, '')
+
       assert_equal mime, MimeMagic.by_magic(File.read(file)).to_s
       assert_equal mime, MimeMagic.by_magic(File.open(file, 'rb')).to_s
+
     end
   end
 
@@ -110,9 +112,9 @@ class TestMimeMagic < Minitest::Test
   def test_process_magic
     MimeMagic.add('application/mimemagic-test',
                   magic: [[0, 'MAGICTEST'], # MAGICTEST at position 0
-                             [1, 'MAGICTEST'], # MAGICTEST at position 1
-                             [9..12, 'MAGICTEST'], # MAGICTEST starting at position 9 to 12
-                             [2, 'MAGICTEST', [[0, 'X'], [0, 'Y']]]]) # MAGICTEST at position 2 and (X at 0 or Y at 0)
+                          [1, 'MAGICTEST'], # MAGICTEST at position 1
+                          [9..12, 'MAGICTEST'], # MAGICTEST starting at position 9 to 12
+                          [2, 'MAGICTEST', [[0, 'X'], [0, 'Y']]]]) # MAGICTEST at position 2 and (X at 0 or Y at 0)
 
     assert_equal 'application/mimemagic-test', MimeMagic.by_magic('MAGICTEST').to_s
     assert_equal 'application/mimemagic-test', MimeMagic.by_magic('XMAGICTEST').to_s
