@@ -19,6 +19,8 @@ Gem::Specification.new do |s|
   s.homepage = 'https://github.com/minad/mimemagic'
   s.license = 'MIT'
 
+  s.add_dependency('nokogiri', '~> 1.11.2')
+
   s.add_development_dependency('minitest', '~> 5.14')
   s.add_development_dependency('rake', '~> 13.0')
 
