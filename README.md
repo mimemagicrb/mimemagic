@@ -3,6 +3,10 @@ provided by freedesktop.org (see http://freedesktop.org/wiki/Software/shared-mim
 
 [![Gem Version](https://img.shields.io/gem/v/mimemagic.svg)](http://rubygems.org/gems/mimemagic)
 
+*Warning:* If you are using a version of MimeMagic < 0.3.7, or version 4.0.0, you may well be in breach of the
+GPL due to a GPL licensed dependency that was bundled with this gem. You should update to a version >= 0.3.7 
+as soon as possible. See https://github.com/minad/mimemagic/issues/97 for details.
+
 Dependencies
 ============
 
