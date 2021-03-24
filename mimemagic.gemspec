@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
 
   s.files         = `git ls-files`.split("\n").reject { |f| f.match(%r{^(test|script)/}) }
   s.require_paths = %w(lib)
-  s.extensions = %w(ext/mimemagic/extconf.rb)
+  s.extensions = %w(ext/mimemagic/Rakefile)
 
   s.summary = 'Fast mime detection by extension or content'
   s.description = 'Fast mime detection by extension or content in pure ruby (Uses freedesktop.org.xml shared-mime-info database)'

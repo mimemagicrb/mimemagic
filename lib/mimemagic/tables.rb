@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 # Generated from script/freedesktop.org.xml
 require 'nokogiri'
+require 'mimemagic/path'
 
 class MimeMagic
   EXTENSIONS = {}
@@ -55,7 +56,6 @@ class MimeMagic
   end
 
   def self.open_mime_database
-    require "mimemagic/mimemagic"
     path = MimeMagic::DATABASE_PATH
     File.open(path)
   end

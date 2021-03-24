@@ -1,4 +1,5 @@
-require "mkmf"
+require "rubygems"
+require "rake/clean"
 
 def locate_mime_database
   # User provided path.
@@ -16,7 +17,14 @@ def locate_mime_database
   raise "No database of MIME types could be found. Ensure you have either installed the shared-mime-types package for your distribution, or obtain a version of freedesktop.org.xml, and set FREEDESKTOP_MIME_TYPES_PATH to the location of that file."
 end
 
-mime_database_path = locate_mime_database
-$defs.push("-DMIMEDB_PATH=\\\"#{mime_database_path}\\\"")
-create_header
-create_makefile("mimemagic/mimemagic")
+desc "Build a file pointing at the database"
+task :default do
+  mime_database_path = locate_mime_database
+  open("../../lib/mimemagic/path.rb", "w") do |f|
+    f.print(%Q{
+      module MimeMagic
+        DATABASE_PATH="#{mime_database_path}"
+      end
+    })
+  end
+end
