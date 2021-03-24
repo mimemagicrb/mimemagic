@@ -14,7 +14,7 @@ You will require a copy of the Freedesktop.org shared-mime-info database to be a
 it's probably available via your package manager, and will probably be in the location it's being looked for
 when the gem is installed.
 
-macOS users can install via Homebrew with `brew install shared-mime-info`.
+macOS users can install the database via Homebrew with `brew install shared-mime-info`.
 
 If for whatever reason you can't do either of those things, you'll need to obtain a copy from the Internet. Set
 the environment variable `FREEDESKTOP_MIME_TYPES_PATH` before installing the gem in order to point the build at
