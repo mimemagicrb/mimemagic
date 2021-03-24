@@ -5,6 +5,8 @@ require 'mimemagic/version'
 
 require 'stringio'
 
+MimeMagic.parse_database("script/freedesktop.org.xml")
+
 # Mime type detection
 class MimeMagic
   attr_reader :type, :mediatype, :subtype
