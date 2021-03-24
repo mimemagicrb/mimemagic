@@ -14,6 +14,9 @@ def locate_mime_database
   # Default path on Linux installs for the MIME types database.
   return "/usr/share/mime/packages/freedesktop.org.xml" if File.exist?("/usr/share/mime/packages/freedesktop.org.xml")
 
+  # Default path when installed with Homebrew
+  return "/usr/local/Cellar/shared-mime-info/2.1/share/shared-mime-info/packages/freedesktop.org.xml" if File.exist?("/usr/local/Cellar/shared-mime-info/2.1/share/shared-mime-info/packages/freedesktop.org.xml")
+
   raise "No database of MIME types could be found. Ensure you have either installed the shared-mime-types package for your distribution, or obtain a version of freedesktop.org.xml, and set FREEDESKTOP_MIME_TYPES_PATH to the location of that file."
 end
 
@@ -22,7 +25,7 @@ task :default do
   mime_database_path = locate_mime_database
   open("../../lib/mimemagic/path.rb", "w") do |f|
     f.print(%Q{
-      module MimeMagic
+      class MimeMagic
         DATABASE_PATH="#{mime_database_path}"
       end
     })
