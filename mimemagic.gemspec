@@ -16,10 +16,10 @@ Gem::Specification.new do |s|
   s.summary = 'Fast mime detection by extension or content'
   s.description = 'Fast mime detection by extension or content in pure ruby (Uses freedesktop.org.xml shared-mime-info database)'
   s.homepage = 'https://github.com/minad/mimemagic'
-  s.license = 'GPLv2'
+  s.license = 'GPL-2.0'
 
-  s.add_development_dependency('minitest', '~> 5.11')
-  s.add_development_dependency('rake')
+  s.add_development_dependency('minitest', '~> 5.14')
+  s.add_development_dependency('rake', '~> 13.0')
 
   if s.respond_to?(:metadata)
     s.metadata['changelog_uri'] = "https://github.com/minad/mimemagic/blob/master/CHANGELOG.md"
