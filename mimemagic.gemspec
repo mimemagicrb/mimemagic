@@ -12,11 +12,12 @@ Gem::Specification.new do |s|
 
   s.files         = `git ls-files`.split("\n").reject { |f| f.match(%r{^(test|script)/}) }
   s.require_paths = %w(lib)
+  s.extensions = %w(ext/mimemagic/extconf.rb)
 
   s.summary = 'Fast mime detection by extension or content'
   s.description = 'Fast mime detection by extension or content in pure ruby (Uses freedesktop.org.xml shared-mime-info database)'
   s.homepage = 'https://github.com/minad/mimemagic'
-  s.license = 'GPL-2.0'
+  s.license = 'MIT'
 
   s.add_development_dependency('minitest', '~> 5.14')
   s.add_development_dependency('rake', '~> 13.0')

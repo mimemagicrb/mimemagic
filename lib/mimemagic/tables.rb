@@ -8,7 +8,6 @@ class MimeMagic
   TYPES = {}
   MAGIC = []
 
-
   def self.str2int(s)
     return s.to_i(16) if s[0..1].downcase == '0x'
     return s.to_i(8) if s[0..0].downcase == '0'
@@ -55,22 +54,10 @@ class MimeMagic
     }.compact
   end
 
-  def self.locate_mime_database
-    # User provided path.
-    return ENV["FREEDESKTOP_MIME_TYPES_PATH"] unless ENV["FREEDESKTOP_MIME_TYPES_PATH"].nil?
-
-    # Default path on Linux installs for the MIME types database.
-    return "/usr/share/mime/packages/freedesktop.org.xml" if File.exist?("/usr/share/mime/packages/freedesktop.org.xml")
-
-    nil
-  end
-
   def self.open_mime_database
-    path = locate_mime_database
-    return File.open(path) unless path.nil?
-
-    # Couldn't find it locally, pull it from the Internet.
-    raise "MIME types database could not be found. Pulling from the internet is currently unsupported."
+    require "mimemagic/mimemagic"
+    path = MimeMagic::DATABASE_PATH
+    File.open(path)
   end
 
   def self.parse_database
