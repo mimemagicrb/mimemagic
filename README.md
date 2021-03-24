@@ -3,6 +3,18 @@ provided by freedesktop.org (see http://freedesktop.org/wiki/Software/shared-mim
 
 [![Gem Version](https://img.shields.io/gem/v/mimemagic.svg)](http://rubygems.org/gems/mimemagic)
 
+Dependencies
+============
+
+You will require a copy of the Freedesktop.org shared-mime-types database to be available. If you're on Linux,
+it's probably available via your package manager, and will probably be in the location it's being looked for
+when the gem is installed.
+
+If you're not on Linux, or for whatever reason the file is found, you'll need to obtain a copy from the Internet.
+
+(TODO: Locate a reliable source for the compiled file, and link to it both here, and in the error message if
+one isn't found.)
+
 Usage
 =====
 
@@ -39,4 +51,4 @@ Daniel Mendler
 LICENSE
 =======
 
-GPL-2.0
+MIT
