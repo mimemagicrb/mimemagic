@@ -5,7 +5,7 @@ require 'mimemagic/version'
 
 require 'stringio'
 
-MimeMagic.parse_database("script/freedesktop.org.xml")
+MimeMagic.parse_database
 
 # Mime type detection
 class MimeMagic

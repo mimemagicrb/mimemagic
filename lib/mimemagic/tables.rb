@@ -55,8 +55,27 @@ class MimeMagic
     }.compact
   end
 
-  def self.parse_database(source_path)
-    file = File.new(source_path)
+  def self.locate_mime_database
+    # User provided path.
+    return ENV["FREEDESKTOP_MIME_TYPES_PATH"] unless ENV["FREEDESKTOP_MIME_TYPES_PATH"].nil?
+
+    # Default path on Linux installs for the MIME types database.
+    return "/usr/share/mime/packages/freedesktop.org.xml" if File.exist?("/usr/share/mime/packages/freedesktop.org.xml")
+
+    nil
+  end
+
+  def self.open_mime_database
+    path = locate_mime_database
+    return File.open(path) unless path.nil?
+
+    # Couldn't find it locally, pull it from the Internet.
+    raise "MIME types database could not be found. Pulling from the internet is currently unsupported."
+  end
+
+  def self.parse_database
+    file = open_mime_database
+
     doc = Nokogiri::XML(file)
     extensions = {}
     types = {}
