@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.summary = 'Fast mime detection by extension or content'
   s.description = 'Fast mime detection by extension or content in pure ruby (Uses freedesktop.org.xml shared-mime-info database)'
   s.homepage = 'https://github.com/minad/mimemagic'
-  s.license = 'MIT'
+  s.license = 'GPLv2'
 
   s.add_development_dependency('minitest', '~> 5.11')
   s.add_development_dependency('rake')
