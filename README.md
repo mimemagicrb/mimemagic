@@ -59,9 +59,9 @@ rake test
 Authors
 =======
 
-Daniel Mendler
-Jon Wood
-[MimeMagic Contributors](https://github.com/mimemagicrb/mimemagic/graphs/contributors)
+* Daniel Mendler
+* Jon Wood
+* [MimeMagic Contributors](https://github.com/mimemagicrb/mimemagic/graphs/contributors)
 
 LICENSE
 =======
