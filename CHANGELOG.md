@@ -4,6 +4,10 @@
 
 ### Breaking Changes
 
+## 0.4.1
+
+Remove `mimemagic/overlay` as it contains outdated, little used, data.
+
 ## 0.3.7 (2021-03-25)
 
 You will now need to ensure you have a copy of the fd.o shared MIME
@@ -17,6 +21,13 @@ None
 ### Fixed
 
 None
+
+## 0.4.1
+
+
+## 0.4.0
+
+Yanked release.
 
 ## 0.3.7 (2021-03-25)
 
