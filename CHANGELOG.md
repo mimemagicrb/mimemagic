@@ -18,6 +18,11 @@ None
 
 None
 
+## 0.3.8 (2021-03-25)
+
+Relax the dependency on Nokogiri to something less specific in order
+to avoid conflicting with other dependencies in people's applications.
+
 ## 0.3.7 (2021-03-25)
 
 Add a dependency on having a preinstalled version of the fd.o shared
