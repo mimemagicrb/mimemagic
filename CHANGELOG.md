@@ -4,7 +4,11 @@
 
 ### Breaking Changes
 
-None
+## 0.3.7 (2021-03-25)
+
+You will now need to ensure you have a copy of the fd.o shared MIME
+types information available before installing this gem. More details
+can be found in the readme.
 
 ### Added
 
@@ -14,6 +18,17 @@ None
 
 None
 
+## 0.3.7 (2021-03-25)
+
+Add a dependency on having a preinstalled version of the fd.o shared
+MIME types info to resolve licensing concerns, and allow this gem to
+remain MIT licensed.
+
+See the readme for details on ensuring you have a copy of the database
+available at install time.
+## 0.3.6 (2021-03-23)
+
+Yanked release, relicensing to GPL due to licensing concerns.
 ## 0.3.5 (2020-05-04)
 
 Mimetype extensions are now ordered by freedesktop.org's priority
