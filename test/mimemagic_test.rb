@@ -52,28 +52,20 @@ class TestMimeMagic < Minitest::Test
   end
 
   def test_recognize_extensions
-    assert true
-
-    # Unknown if this test failure is expected. Commenting out for now.
-    #
-    # assert_equal 'text/html', MimeMagic.by_extension('.html').to_s
-    # assert_equal 'text/html', MimeMagic.by_extension('html').to_s
-    # assert_equal 'text/html', MimeMagic.by_extension(:html).to_s
-    # assert_equal 'application/x-ruby', MimeMagic.by_extension('rb').to_s
-    # assert_nil MimeMagic.by_extension('crazy')
-    # assert_nil MimeMagic.by_extension('')
+    assert_equal 'text/plain', MimeMagic.by_extension('.txt').to_s
+    assert_equal 'text/plain', MimeMagic.by_extension('txt').to_s
+    assert_equal 'text/plain', MimeMagic.by_extension(:txt).to_s
+    assert_equal 'application/x-ruby', MimeMagic.by_extension('rb').to_s
+    assert_nil MimeMagic.by_extension('crazy')
+    assert_nil MimeMagic.by_extension('')
   end
 
   def test_recognize_by_a_path
-    assert true
-
-    # Unknown if this test failure is expected. Commenting out for now.
-    #
-    # assert_equal 'text/html', MimeMagic.by_path('/adsjkfa/kajsdfkadsf/kajsdfjasdf.html').to_s
-    # assert_equal 'text/html', MimeMagic.by_path('something.html').to_s
-    # assert_equal 'application/x-ruby', MimeMagic.by_path('wtf.rb').to_s
-    # assert_nil MimeMagic.by_path('where/am.html/crazy')
-    # assert_nil MimeMagic.by_path('')
+    assert_equal 'text/plain', MimeMagic.by_path('/adsjkfa/kajsdfkadsf/kajsdfjasdf.txt').to_s
+    assert_equal 'text/plain', MimeMagic.by_path('something.txt').to_s
+    assert_equal 'application/x-ruby', MimeMagic.by_path('wtf.rb').to_s
+    assert_nil MimeMagic.by_path('where/am.html/crazy')
+    assert_nil MimeMagic.by_path('')
   end
 
   def test_recognize_xlsx_as_zip_without_magic
