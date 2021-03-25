@@ -23,8 +23,12 @@ None
 * Resolve issues parsing the version of freedesktop.org.xml shipped with
   Ubuntu Trusty.
 
+* Reintroduce overlays, since it seems at least some people were using
+  them.
+  
 * Make Rake a runtime dependency.
 
+* Fix the test suite.
 ## 0.3.8 (2021-03-25)
 
 Relax the dependency on Nokogiri to something less specific in order
