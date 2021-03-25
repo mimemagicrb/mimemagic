@@ -68,37 +68,24 @@ class TestMimeMagic < Minitest::Test
     assert_nil MimeMagic.by_path('')
   end
 
-  def test_recognize_xlsx_as_zip_without_magic
-    file = "test/files/application.vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    %w(msoffice rubyxl gdocs).each do |variant|
-      file = "test/files/application.vnd.openxmlformats-officedocument.spreadsheetml{#{variant}}.sheet"
-      assert_equal "application/zip", MimeMagic.by_magic(File.read(file)).to_s
-      assert_equal "application/zip", MimeMagic.by_magic(File.open(file, 'rb')).to_s
+  def test_recognize_by_magic
+    load "mimemagic/overlay.rb"
+
+    Dir['test/files/*'].each do |file|
+      mime = file[11..-1].sub('.', '/').sub(/\{\w+\}/, '')
+      assert_equal mime, MimeMagic.by_magic(File.read(file)).to_s
+      assert_equal mime, MimeMagic.by_magic(File.open(file, 'rb')).to_s
     end
   end
 
-  def test_recognize_by_magic
-    assert true
-
-    # Unknown if this test failure is expected. Commenting out for now.
-    #
-    # Dir['test/files/*'].each do |file|
-    #   mime = file[11..-1].sub('.', '/').sub(/\{\w+\}/, '')
-    #   assert_equal mime, MimeMagic.by_magic(File.read(file)).to_s
-    #   assert_equal mime, MimeMagic.by_magic(File.open(file, 'rb')).to_s
-    # end
-  end
-
   def test_recognize_all_by_magic
-    assert true
+    load "mimemagic/overlay.rb"
 
-    # Unknown if this test failure is expected. Commenting out for now.
-    #
-    # %w(msoffice rubyxl gdocs).each do |variant|
-    #   file = "test/files/application.vnd.openxmlformats-officedocument.spreadsheetml{#{variant}}.sheet"
-    #   mimes = %w[application/vnd.openxmlformats-officedocument.spreadsheetml.sheet application/zip]
-    #   assert_equal mimes, MimeMagic.all_by_magic(File.read(file)).map(&:type)
-    # end
+    %w(msoffice rubyxl gdocs).each do |variant|
+      file = "test/files/application.vnd.openxmlformats-officedocument.spreadsheetml{#{variant}}.sheet"
+      mimes = %w[application/vnd.openxmlformats-officedocument.spreadsheetml.sheet application/zip]
+      assert_equal mimes, MimeMagic.all_by_magic(File.read(file)).map(&:type)
+    end
   end
 
   def test_have_add
