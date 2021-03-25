@@ -5,6 +5,8 @@ require 'mimemagic/version'
 
 require 'stringio'
 
+MimeMagic.parse_database
+
 # Mime type detection
 class MimeMagic
   attr_reader :type, :mediatype, :subtype

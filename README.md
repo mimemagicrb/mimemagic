@@ -3,6 +3,31 @@ provided by freedesktop.org (see http://freedesktop.org/wiki/Software/shared-mim
 
 [![Gem Version](https://img.shields.io/gem/v/mimemagic.svg)](http://rubygems.org/gems/mimemagic)
 
+*Warning:* If you are using a version of MimeMagic < 0.3.7, or version 0.4.0, you may well be in breach of the
+GPL due to a GPL licensed dependency that was bundled with this gem. You should update to a version >= 0.3.7 
+as soon as possible. See https://github.com/minad/mimemagic/issues/97 for details.
+
+Dependencies
+============
+
+You will require a copy of the Freedesktop.org shared-mime-info database to be available. If you're on Linux,
+it's probably available via your package manager, and will probably be in the location it's being looked for
+when the gem is installed.
+
+macOS users can install the database via Homebrew with `brew install shared-mime-info`.
+
+Should you be unable to use a package manager you can obtain a copy of the needed file by extracting it from
+the Debian package. This process will also work on a Windows machine.
+
+1. Download the package from https://packages.debian.org/sid/amd64/shared-mime-info/download
+2. Ensure the command line version of 7-Zip is installed
+3. `7z x -so shared-mime-info_2.0-1_amd64.deb data.tar | 7z e -sidata.tar "./usr/share/mime/packages/freedesktop.org.xml"`
+
+
+Place the file `freedesktop.org.xml` in an appropriate location, and then set the environment variable
+`FREEDESKTOP_MIME_TYPES_PATH` to that path. Once that has been done the gem should install successfully. Please
+note that the gem will depend upon the file remaining in that location at run time.
+
 Usage
 =====
 
@@ -39,4 +64,4 @@ Daniel Mendler
 LICENSE
 =======
 
-GPL-2.0
+MIT
