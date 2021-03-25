@@ -6,9 +6,9 @@ Gem::Specification.new do |s|
   s.name = 'mimemagic'
   s.version = MimeMagic::VERSION
 
-  s.authors = ['Daniel Mendler']
+  s.authors = ['Daniel Mendler', 'Jon Wood']
   s.date = Date.today.to_s
-  s.email = ['mail@daniel-mendler.de']
+  s.email = ['mail@daniel-mendler.de', 'jon@blankpad.net']
 
   s.files         = `git ls-files`.split("\n").reject { |f| f.match(%r{^(test|script)/}) }
   s.require_paths = %w(lib)
@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
 
   s.summary = 'Fast mime detection by extension or content'
   s.description = 'Fast mime detection by extension or content in pure ruby (Uses freedesktop.org.xml shared-mime-info database)'
-  s.homepage = 'https://github.com/minad/mimemagic'
+  s.homepage = 'https://github.com/mimemagicrb/mimemagic'
   s.license = 'MIT'
 
   s.add_dependency('nokogiri', '~> 1.11.2')
@@ -25,8 +25,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rake', '~> 13.0')
 
   if s.respond_to?(:metadata)
-    s.metadata['changelog_uri'] = "https://github.com/minad/mimemagic/blob/master/CHANGELOG.md"
-    s.metadata['source_code_uri'] = "https://github.com/minad/mimemagic"
-    s.metadata['bug_tracker_uri'] = "https://github.com/minad/mimemagic/issues"
+    s.metadata['changelog_uri'] = "https://github.com/mimemagicrb/mimemagic/blob/master/CHANGELOG.md"
+    s.metadata['source_code_uri'] = "https://github.com/mimemagicrb/mimemagic"
+    s.metadata['bug_tracker_uri'] = "https://github.com/mimemagicrb/mimemagic/issues"
   end
 end

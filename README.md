@@ -45,7 +45,7 @@ You can add your own magic with `MimeMagic.add`.
 API
 ===
 
-http://www.rubydoc.info/github/minad/mimemagic
+http://www.rubydoc.info/github/mimemagicrb/mimemagic
 
 Tests
 =====
@@ -60,6 +60,8 @@ Authors
 =======
 
 Daniel Mendler
+Jon Wood
+[MimeMagic Contributors](https://github.com/mimemagicrb/mimemagic/graphs/contributors)
 
 LICENSE
 =======
