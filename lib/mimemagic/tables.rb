@@ -26,7 +26,16 @@ class MimeMagic
         offset = offset.size == 2 ? offset[0]..offset[1] : offset[0]
         case type
         when 'string'
-          value.gsub!(/\\(x[\dA-Fa-f]{1,2}|0\d{1,3}|\d{1,3}|.)/) { eval("\"\\#{$1}\"") }
+          # This *one* pattern match, in the entirety of fd.o's mime types blows up the parser
+          # because of the escape character \c, so right here we have a hideous hack to
+          # accommodate that.
+          if value == '\chapter'
+            '\chapter'
+          else
+            value.gsub!(/\\(x[\dA-Fa-f]{1,2}|0\d{1,3}|\d{1,3}|.)/) {
+              eval("\"\\#{$1}\"")
+            }
+          end
         when 'big16'
           value = str2int(value)
           value = ((value >> 8).chr + (value & 0xFF).chr)
