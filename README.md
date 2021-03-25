@@ -16,12 +16,17 @@ when the gem is installed.
 
 macOS users can install the database via Homebrew with `brew install shared-mime-info`.
 
-If for whatever reason you can't do either of those things, you'll need to obtain a copy from the Internet. Set
-the environment variable `FREEDESKTOP_MIME_TYPES_PATH` before installing the gem in order to point the build at
-that location.
+Should you be unable to use a package manager you can obtain a copy of the needed file by extracting it from
+the Debian package. This process will also work on a Windows machine.
 
-(TODO: Locate a reliable source for the compiled file, and link to it both here, and in the error message if
-one isn't found.)
+1. Download the package from https://packages.debian.org/sid/amd64/shared-mime-info/download
+2. Ensure the command line version of 7-Zip is installed
+3. `7z x -so shared-mime-info_2.0-1_amd64.deb data.tar | 7z e -sidata.tar "./usr/share/mime/packages/freedesktop.org.xml"`
+
+
+Place the file `freedesktop.org.xml` in an appropriate location, and then set the environment variable
+`FREEDESKTOP_MIME_TYPES_PATH` to that path. Once that has been done the gem should install successfully. Please
+note that the gem will depend upon the file remaining in that location at run time.
 
 Usage
 =====
