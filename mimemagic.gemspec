@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email = ['mail@daniel-mendler.de', 'jon@blankpad.net']
 
   s.files         = `git ls-files`.split("\n").reject { |f| f.match(%r{^(test|script)/}) }
-  s.require_paths = %w(lib)
+  s.require_paths = %w(ext lib)
   s.extensions = %w(ext/mimemagic/Rakefile)
 
   s.summary = 'Fast mime detection by extension or content'

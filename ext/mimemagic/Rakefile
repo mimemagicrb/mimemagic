@@ -23,7 +23,7 @@ end
 desc "Build a file pointing at the database"
 task :default do
   mime_database_path = locate_mime_database
-  open("../../lib/mimemagic/path.rb", "w") do |f|
+  open("path.rb", "w") do |f|
     f.print(%Q{
       class MimeMagic
         DATABASE_PATH="#{mime_database_path}"
