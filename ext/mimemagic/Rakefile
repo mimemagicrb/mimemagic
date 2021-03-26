@@ -6,6 +6,7 @@ def locate_mime_database
     (File.expand_path(ENV["FREEDESKTOP_MIME_TYPES_PATH"]) if ENV["FREEDESKTOP_MIME_TYPES_PATH"]),
     "/usr/local/share/mime/packages/freedesktop.org.xml",
     "/opt/homebrew/share/mime/packages/freedesktop.org.xml",
+    "/opt/local/share/mime/packages/freedesktop.org.xml",
     "/usr/share/mime/packages/freedesktop.org.xml"
   ].compact
   path = possible_paths.find { |candidate| File.exist?(candidate) }
@@ -23,8 +24,10 @@ end
 desc "Build a file pointing at the database"
 task :default do
   mime_database_path = locate_mime_database
-  path_rb = File.expand_path("../../../lib/mimemagic/path.rb", __FILE__)
-  open(path_rb, "w") do |f|
+  target_dir = "#{ENV.fetch("RUBYARCHDIR")}/mimemagic"
+  mkdir_p target_dir
+
+  open("#{target_dir}/path.rb", "w") do |f|
     f.print(<<~SOURCE
       class MimeMagic
         DATABASE_PATH="#{mime_database_path}"
