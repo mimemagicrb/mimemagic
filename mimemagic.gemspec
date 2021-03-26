@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.extensions = %w(ext/mimemagic/Rakefile)
 
   s.summary = 'Fast mime detection by extension or content'
-  s.description = 'Fast mime detection by extension or content in pure ruby (Uses freedesktop.org.xml shared-mime-info database)'
+  s.description = 'Fast mime detection by extension or content (Uses freedesktop.org.xml shared-mime-info database)'
   s.homepage = 'https://github.com/mimemagicrb/mimemagic'
   s.license = 'MIT'
 
