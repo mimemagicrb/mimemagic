@@ -17,6 +17,14 @@ def locate_mime_database
    Ensure you have either installed the shared-mime-info package for your distribution, or
    obtain a version of freedesktop.org.xml and set FREEDESKTOP_MIME_TYPES_PATH to the location
    of that file.
+
+   This gem might be installed as a dependency of some bigger package, such as rails, activestorage,
+   axlsx or cucumber. While most of these packages use the functionality of this gem, some gems have
+   included this gem by accident. Set USE_FREEDESKTOP_PLACEHOLDER=true if you are certain that you
+   do not need this gem, and wish to skip the inclusion of freedesktop.org.xml.
+
+   The FREEDESKTOP_PLACEHOLDER option is meant as a transitional feature, and will be deprecated in
+   the next release.
   ERROR
 end
 
