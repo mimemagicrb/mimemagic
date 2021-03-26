@@ -2,5 +2,12 @@
 *.gem
 Gemfile.lock
 .bundle
+
+# doc
 .yardoc
+doc/
+
 vendor
+
+# don't include generated files
+lib/mimemagic/path.rb

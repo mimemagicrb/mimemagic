@@ -18,6 +18,19 @@ None
 
 None
 
+## 0.3.10
+
+* Resolve issues parsing the version of freedesktop.org.xml shipped with
+  Ubuntu Trusty.
+
+* Make Rake a runtime dependency.
+
+* Fix the test suite.
+
+* Relax the dependency on Nokogiri to something less specific in order
+to avoid conflicting with other dependencies in people's applications.
+
+* 
 ## 0.3.9 (2021-03-25)
 
 * Resolve issues parsing the version of freedesktop.org.xml shipped with
