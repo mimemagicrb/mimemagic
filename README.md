@@ -46,10 +46,13 @@ http://www.rubydoc.info/github/mimemagicrb/mimemagic
 Tests
 =====
 
-```
-bundle install
+```console
+$ bundle install
+$ cd ext/mimemagic/
+$ bundle exec rake
+$ popd
 
-rake test
+$ bundle exec rake test
 ```
 
 Authors

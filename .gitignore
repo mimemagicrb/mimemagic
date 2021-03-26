@@ -4,3 +4,4 @@ Gemfile.lock
 .bundle
 .yardoc
 vendor
+lib/mimemagic/path.rb
