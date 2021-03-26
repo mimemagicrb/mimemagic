@@ -48,9 +48,6 @@ Tests
 
 ```console
 $ bundle install
-$ cd ext/mimemagic/
-$ bundle exec rake
-$ popd
 
 $ bundle exec rake test
 ```
@@ -65,4 +62,4 @@ Authors
 LICENSE
 =======
 
-MIT
+{file:LICENSE MIT}
