@@ -23,6 +23,10 @@ end
 desc "Build a file pointing at the database"
 task :default do
   mime_database_path = locate_mime_database
+  if ENV["USE_FREEDESKTOP_PLACEHOLDER"] == "true"
+    File.write("../../dummy.xml", "")
+    mime_database_path = File.expand_path("../../dummy.xml")
+  end
   open("../../lib/mimemagic/path.rb", "w") do |f|
     f.print(%Q{
       class MimeMagic
