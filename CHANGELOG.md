@@ -20,17 +20,15 @@ None
 
 ## 0.3.10
 
-* Resolve issues parsing the version of freedesktop.org.xml shipped with
-  Ubuntu Trusty.
+* Improve the development/test experience (@coldnebo, @kachick)
 
-* Make Rake a runtime dependency.
+* Ensure the gem works in environments with gem caching (@haines)
 
-* Fix the test suite.
+* Add support for MacPorts installed dependencies (@brlanier)
 
-* Relax the dependency on Nokogiri to something less specific in order
-to avoid conflicting with other dependencies in people's applications.
-
-* 
+* Allow using a dummy XML file in cases where the gem is just a transient
+  dependency. (@Scharrels)
+  
 ## 0.3.9 (2021-03-25)
 
 * Resolve issues parsing the version of freedesktop.org.xml shipped with
