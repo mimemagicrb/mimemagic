@@ -6,6 +6,7 @@ def locate_mime_database
     (File.expand_path(ENV["FREEDESKTOP_MIME_TYPES_PATH"]) if ENV["FREEDESKTOP_MIME_TYPES_PATH"]),
     "/usr/local/share/mime/packages/freedesktop.org.xml",
     "/opt/homebrew/share/mime/packages/freedesktop.org.xml",
+    "/opt/local/share/mime/packages/freedesktop.org.xml",
     "/usr/share/mime/packages/freedesktop.org.xml"
   ].compact
   path = possible_paths.find { |candidate| File.exist?(candidate) }
