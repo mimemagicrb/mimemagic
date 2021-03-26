@@ -21,6 +21,17 @@ None
 ### Fixed
 
 None
+## 0.4.3
+
+* Improve the development/test experience (@coldnebo, @kachick)
+
+* Ensure the gem works in environments with gem caching (@haines)
+
+* Add support for MacPorts installed dependencies (@brlanier)
+
+* Allow using a dummy XML file in cases where the gem is just a transient
+  dependency. (@Scharrels)
+
 
 ## 0.4.2
 
@@ -40,6 +51,17 @@ to avoid conflicting with other dependencies in people's applications.
 ## 0.4.0
 
 Yanked release.
+
+## 0.3.10
+
+* Improve the development/test experience (@coldnebo, @kachick)
+
+* Ensure the gem works in environments with gem caching (@haines)
+
+* Add support for MacPorts installed dependencies (@brlanier)
+
+* Allow using a dummy XML file in cases where the gem is just a transient
+  dependency. (@Scharrels)
 
 ## 0.3.9 (2021-03-25)
 
