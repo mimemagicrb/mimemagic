@@ -24,6 +24,17 @@ Place the file `freedesktop.org.xml` in an appropriate location, and then set th
 `FREEDESKTOP_MIME_TYPES_PATH` to that path. Once that has been done the gem should install successfully. Please
 note that the gem will depend upon the file remaining in that location at run time.
 
+For Windows
+===============
+
+This was tested in Ruby installed via Ruby Installer, but should work for other methods too.
+
+1. Download 7-Zip from https://www.7-zip.org/download.html
+2. Download the package from https://packages.debian.org/sid/amd64/shared-mime-info/download
+3. Unzip the file in `data.tar\.\usr\share\mime\packages\freedesktop.org.xml` somewhere, for the purpose of this tutorial assuming C:\shared-mime-info
+4. In command line, export environment variable: `set FREEDESKTOP_MIME_TYPES_PATH=C:\shared-mime-info\freedesktop.org.xml`
+5. Install the gem via `bundle install` or `gem install mimemagic`
+
 Usage
 =====
 
