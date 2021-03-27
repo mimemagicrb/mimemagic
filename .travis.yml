@@ -12,6 +12,7 @@ jobs:
       env: RUBYOPT="--enable-frozen-string-literal"
     - rvm: ruby-head
       env: RUBYOPT="--enable-frozen-string-literal"
+    - rvm: truffleruby-head
 before_install:
   # 1. The pre-installed Bundler version on Travis is very old; causes 1.9.3 build issues
   # 2. Bundler 2.0 is not supported by the whole matrix
