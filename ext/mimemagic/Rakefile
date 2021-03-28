@@ -28,7 +28,7 @@ task :default do
   mkdir_p target_dir
 
   open("#{target_dir}/path.rb", "w") do |f|
-    f.print(<<~SOURCE
+    f.print(<<-SOURCE
       class MimeMagic
         DATABASE_PATH="#{mime_database_path}"
       end
