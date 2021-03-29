@@ -1,0 +1,42 @@
+defaults: &defaults
+  working_directory: ~/app
+  docker:
+    - image: circleci/ruby:2.3.5
+
+version: 2.0
+jobs:
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Bundle install
+          command: bundle install
+      - run:
+          name: Run tests
+          command: rake test
+  release:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Install publishing gem
+          command: gem install fiverr_gem_services -s "https://$BUNDLE_FIVERR__JFROG__IO@$FIVERR_ARTIACTORY_END_POINT"
+      - run:
+          name: Publish gem
+          command: fiverr gems publish
+
+workflows:
+  version: 2
+  ci-cd:
+    jobs:
+      - test
+      - release:
+          context: org-global
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - master
+                - /.*_pre/
