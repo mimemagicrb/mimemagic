@@ -1,0 +1,49 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+      - master
+      - '*v'
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+      - '**'
+jobs:
+  test:
+    name: 'Ruby: ${{ matrix.ruby-version }}'
+    runs-on: ubuntu-20.04
+    continue-on-error: ${{ matrix.allow-failure }}
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: ['2.3', '2.4', '2.5', '2.6', '2.7', '3.0', 'truffleruby']
+        allow-failure: [false]
+        frozen-string: [true]
+        include:
+          - ruby-version: 'head'
+            allow-failure: true
+            frozen-string: true
+          # issue with redcarpet gem installation
+          - ruby-version: 'jruby'
+            allow-failure: true
+            frozen-string: true
+          - ruby-version: '2.2'
+            allow-failure: true
+            frozen-string: false
+          # minitest requirement is breaking this job
+          - ruby-version: '2.1'
+            allow-failure: true
+            frozen-string: false
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - run: echo "{RUBYOPT}={--enable-frozen-string-literal}" >> $GITHUB_ENV
+        if: ${{ matrix.frozen-string }}
+      - run: bundle exec rake test
+        env:
+          RUBYARCHDIR: './lib'
