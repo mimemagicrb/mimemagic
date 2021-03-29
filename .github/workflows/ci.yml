@@ -29,10 +29,14 @@ jobs:
           - ruby-version: 'jruby'
             allow-failure: true
             frozen-string: true
+          # Issue with squiggly heredoc affecting main/master and 0.3: https://github.com/mimemagicrb/mimemagic/pull/150/files 
+          # Either fix that or remove 2.2 support in main/master
           - ruby-version: '2.2'
             allow-failure: true
             frozen-string: false
           # minitest requirement is breaking this job
+          # Issue with squiggly heredoc affecting main/master and 0.3: https://github.com/mimemagicrb/mimemagic/pull/150/files 
+          #   Either fix that or remove 2.2 support in main/master
           - ruby-version: '2.1'
             allow-failure: true
             frozen-string: false
