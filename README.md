@@ -62,4 +62,4 @@ Authors
 LICENSE
 =======
 
-{file:LICENSE MIT}
+[MIT License](https://opensource.org/licenses/MIT)
