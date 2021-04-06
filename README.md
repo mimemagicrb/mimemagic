@@ -10,7 +10,10 @@ You will require a copy of the Freedesktop.org shared-mime-info database to be a
 it's probably available via your package manager, and will probably be in the location it's being looked for
 when the gem is installed.
 
-macOS users can install the database via Homebrew with `brew install shared-mime-info`.
+macOS users can install the database via:
+
+1. Homebrew with `brew install shared-mime-info`
+2. MacPorts with `port install shared-mime-info`
 
 Should you be unable to use a package manager you can obtain a copy of the needed file by extracting it from
 the Debian package. This process will also work on a Windows machine.
