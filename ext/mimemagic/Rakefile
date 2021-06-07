@@ -8,7 +8,7 @@ def locate_mime_database
     if ENV["XDG_DATA_DIRS"]
       ENV["XDG_DATA_DIRS"].
         split(':').
-        map { |data_dir| "#{data_dir}/mime/packages/freedesktop.org.xml" }
+        map { |data_dir| File.join(data_dir, "mime/packages/freedesktop.org.xml") }
     else
       []
     end) + [
