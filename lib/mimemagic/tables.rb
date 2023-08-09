@@ -94,9 +94,8 @@ class MimeMagic
 
       unless exts.empty?
         exts.each { |x| extensions[x] = type unless extensions.include?(x) }
-        t = types[type] = [exts, subclass, comments[nil], type, aliases]
-        # also add the aliases XXX NO don't add them yet
-        # aliases.each { |a| types[a] = t }
+        types[type] = [exts, subclass, comments[nil], type, aliases]
+        # don't add the aliases yet; we do that below
       end
     end
 
