@@ -80,17 +80,23 @@ class MimeMagic
       comments = Hash[*(mime/'comment').map {|comment| [comment['xml:lang'], comment.inner_text] }.flatten]
       type = mime['type']
       subclass = (mime/'sub-class-of').map{|x| x['type']}
-      exts = (mime/'glob').map{|x| x['pattern'] =~ /^\*\.([^\[\]]+)$/ ? $1.downcase : nil }.compact
+      exts = (mime/'glob').map do |x|
+        x['pattern'] =~ /^\*\.([^\[\]]+)$/ ? $1.downcase : nil
+      end.compact
+
       (mime/'magic').each do |magic|
         priority = magic['priority'].to_i
         matches = get_matches(magic)
         magics << [priority, type, matches]
       end
-      if !exts.empty?
-        exts.each{|x|
-          extensions[x] = type if !extensions.include?(x)
-        }
-        types[type] = [exts,subclass,comments[nil]]
+
+      aliases = (mime/'alias/@type').map { |a| a.value.downcase.strip.freeze }
+
+      unless exts.empty?
+        exts.each { |x| extensions[x] = type unless extensions.include?(x) }
+        t = types[type] = [exts, subclass, comments[nil], type, aliases]
+        # also add the aliases XXX NO don't add them yet
+        # aliases.each { |a| types[a] = t }
       end
     end
 
@@ -141,13 +147,17 @@ class MimeMagic
     extensions.keys.sort.each do |key|
       EXTENSIONS[key] = extensions[key]
     end
-    types.keys.sort.each do |key|
-      exts = types[key][0]
-      parents = types[key][1].sort
-      comment = types[key][2]
 
-      TYPES[key] = [exts, parents, comment]
+    types.keys.sort.each do |key|
+      exts, parents, comment, canon, aliases = *types[key]
+
+      parents.sort!
+      aliases.sort!
+
+      t = TYPES[key] = [exts, parents, comment, canon, aliases].freeze
+      aliases.each { |a| TYPES[a] = t }
     end
+
     magics.each do |priority, type, matches|
       MAGIC << [type, matches]
     end
