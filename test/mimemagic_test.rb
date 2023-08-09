@@ -52,28 +52,37 @@ class TestMimeMagic < Minitest::Test
   end
 
   def test_recognize_extensions
-    assert true
+    assert MimeMagic.by_extension('html')
 
-    # Unknown if this test failure is expected. Commenting out for now.
+    # these resolve to application/xhtml+xml instead of text/html
+    # because of ambiguities in file extension associations; the data
+    # file associates the former since it's first.
     #
     # assert_equal 'text/html', MimeMagic.by_extension('.html').to_s
     # assert_equal 'text/html', MimeMagic.by_extension('html').to_s
     # assert_equal 'text/html', MimeMagic.by_extension(:html).to_s
-    # assert_equal 'application/x-ruby', MimeMagic.by_extension('rb').to_s
-    # assert_nil MimeMagic.by_extension('crazy')
-    # assert_nil MimeMagic.by_extension('')
+
+    assert_equal 'application/x-ruby', MimeMagic.by_extension('rb').to_s
+    assert_nil MimeMagic.by_extension('crazy')
+    assert_nil MimeMagic.by_extension('')
+    # try with duplicate
+    assert_equal 'application/octet-stream',
+      MimeMagic.by_extension('crazy', default: true).to_s
   end
 
   def test_recognize_by_a_path
-    assert true
 
-    # Unknown if this test failure is expected. Commenting out for now.
+    # once again, ambiguities.
     #
     # assert_equal 'text/html', MimeMagic.by_path('/adsjkfa/kajsdfkadsf/kajsdfjasdf.html').to_s
     # assert_equal 'text/html', MimeMagic.by_path('something.html').to_s
-    # assert_equal 'application/x-ruby', MimeMagic.by_path('wtf.rb').to_s
-    # assert_nil MimeMagic.by_path('where/am.html/crazy')
-    # assert_nil MimeMagic.by_path('')
+
+    assert_equal 'application/x-ruby', MimeMagic.by_path('wtf.rb').to_s
+    assert_nil MimeMagic.by_path('where/am.html/crazy')
+    assert_nil MimeMagic.by_path('')
+
+    assert_equal 'application/octet-stream',
+      MimeMagic.by_path('', default: true).to_s
   end
 
   def test_recognize_xlsx_as_zip_without_magic
@@ -149,6 +158,16 @@ class TestMimeMagic < Minitest::Test
     assert_equal 'application/mimemagic-test', MimeMagic.by_magic(StringIO.new 'X MAGICTEST').to_s
     assert_equal 'application/mimemagic-test', MimeMagic.by_magic(StringIO.new 'Y MAGICTEST').to_s
     assert_nil MimeMagic.by_magic(StringIO.new 'Z MAGICTEST')
+  end
+
+  def test_type_is_binary
+    assert MimeMagic.binary? 'psd'
+    refute MimeMagic.binary? 'html'
+  end
+
+  def test_fancy_constructor
+    assert_equal 'text/html', MimeMagic['text/html'].to_s
+    assert_equal 'application/pdf', MimeMagic['pdf'].to_s
   end
 
   class IOObject

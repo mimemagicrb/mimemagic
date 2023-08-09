@@ -92,8 +92,9 @@ class MimeMagic
 
       aliases = (mime/'alias/@type').map { |a| a.value.downcase.strip.freeze }
 
+      # XXX uhh do we only use the type if it has a file extension??
       unless exts.empty?
-        exts.each { |x| extensions[x] = type unless extensions.include?(x) }
+        exts.each { |x| extensions[x] ||= type }
         types[type] = [exts, subclass, comments[nil], type, aliases]
         # don't add the aliases yet; we do that below
       end
@@ -153,7 +154,10 @@ class MimeMagic
       parents.sort!
       aliases.sort!
 
+      # we are copying it i guess
       t = TYPES[key] = [exts, parents, comment, canon, aliases].freeze
+
+      # now do the aliases oops they'll be out of order oh well
       aliases.each { |a| TYPES[a] = t }
     end
 

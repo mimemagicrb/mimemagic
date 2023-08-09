@@ -106,14 +106,15 @@ class MimeMagic
     TYPES.fetch(type, [nil, nil, nil])[2].to_s.dup
   end
 
-  # Look up MIME type by file extension
+  # Look up MIME type by file extension. When `default` is true
+  #
   # @param path [#to_s]
   # @param default [false, true, #to_s, MimeMagic] a default fallback type
   def self.by_extension ext, default: false
     ext = ext.to_s.downcase.delete_prefix ?.
-    default = coerce_default ext, default
+    default = coerce_default '', default
     mime = EXTENSIONS[ext]
-    mime && new(mime) || default
+    mime ? new(mime) : default
   end
 
   # Look up MIME type by filename.
