@@ -102,14 +102,21 @@ class MimeMagic
   end
 
   # Get MIME comment.
+  #
+  # @return [nil, String] the comment
+  #
   def comment
     TYPES.fetch(type, [nil, nil, nil])[2].to_s.dup
   end
 
-  # Look up MIME type by file extension. When `default` is true
+  # Look up MIME type by file extension. When `default` is true or a
+  # value, this method will always return a value.
   #
   # @param path [#to_s]
   # @param default [false, true, #to_s, MimeMagic] a default fallback type
+  #
+  # @return [nil, MimeMagic] the type, if found.
+  #
   def self.by_extension ext, default: false
     ext = ext.to_s.downcase.delete_prefix ?.
     default = coerce_default '', default
@@ -117,23 +124,27 @@ class MimeMagic
     mime ? new(mime) : default
   end
 
-  # Look up MIME type by filename.
+  # Look up MIME type by file path. When `default` is true or a value,
+  # this method will always return a value.
   #
-  # @param path [#to_s]
+  # @param path [#to_s] the file/path to check
   # @param default [false, true, #to_s, MimeMagic] a default fallback type
+  #
+  # @return [nil, MimeMagic] the type, if found.
   #
   def self.by_path path, default: false
     by_extension(File.extname(path), default: default)
   end
 
-  # Look up MIME type by magic content analysis.
+  # Look up MIME type by magic content analysis. When `default` is true or a
+  # value, this method will always return a value.
   #
   # @note This is a relatively slow operation.
   #
   # @param io [#read, #to_s] the IO/String-like object to check for magic
   # @param default [false, true, #to_s, MimeMagic] a default fallback type
   #
-  # @return [nil, MimeMagic] a matching type
+  # @return [nil, MimeMagic] a matching type, if found.
   #
   def self.by_magic io, default: false
     default = coerce_default io, default
@@ -141,7 +152,9 @@ class MimeMagic
     new mime.first
   end
 
-  # Return all matching MIME types by magic content analysis.
+  # Return all matching MIME types by magic content analysis. When
+  # `default` is true or a value, the result will never be empty.
+  #
   # @note This is a relatively slow operation.
   #
   # @param io [#read, #to_s] the IO/String-like object to check for magic
