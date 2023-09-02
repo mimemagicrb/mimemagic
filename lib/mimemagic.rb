@@ -19,7 +19,8 @@ class MimeMagic
     @mediatype, @subtype = @type.split ?/, 2
   end
 
-  # Syntactic sugar alias for constructor.
+  # Syntactic sugar alias for constructor. No-op if `type` is already
+  # a {MimeMagic} object.
   #
   # @param type [#to_s] a string-like object representing a MIME type
   #  or file extension.
@@ -27,6 +28,10 @@ class MimeMagic
   # @return [MimeMagic] the instantiated object.
   #
   def self.[] type
+    # try noop first
+    return type if type.is_a? self
+
+    # now we handle the string
     type = type.to_s.downcase.strip
     return by_extension type unless type.to_s.include? ?/
     new type
@@ -49,7 +54,7 @@ class MimeMagic
     t = TYPES[type] = [extensions, [parents].flatten.compact,
                    comment, type, aliases]
     aliases.each { |a| TYPES[a] = t }
-    extensions.each {|ext| EXTENSIONS[ext] = type }
+    extensions.each {|ext| EXTENSIONS[ext] ||= type }
 
     MAGIC.unshift [type, magic] if magic
 
@@ -72,7 +77,7 @@ class MimeMagic
   end
 
   # Returns true if type is a text format.
-  def text?; mediatype == 'text' || child_of?('text/plain'); end
+  def text?; mediatype == 'text' || descendant_of?('text/plain'); end
 
   # Determine if the type is an image.
   def image?; mediatype == 'image'; end
@@ -86,11 +91,14 @@ class MimeMagic
   # Returns true if type is child of parent type
   #
   # @param parent [#to_s] a candidate parent type
+  # @param recurse [true, false] whether to recurse
   #
   # @return [true, false] whether `self` is a child of `parent`
   #
-  def child_of?(parent)
-    self.class.child?(type, parent)
+  def child_of?(parent, recurse: true)
+    return descendant_of? parent if recurse
+    return unless c = canonical
+    c.parents.include? self.class[parent].canonical
   end
 
   # Get string list of file extensions.
@@ -216,17 +224,34 @@ class MimeMagic
   # @return [true, false] whether `self` is a child of `parent`
   #
   def self.child?(child, parent)
-    child == parent || TYPES.fetch(child, [nil, []])[1].any? do |p|
-      child? p, parent
-    end
+    self[child].parents.include? self[parent].canonical
   end
 
-  # Return the canonical type.
+  # Returns true if the ancestor type is anywhere in the subject
+  # type's lineage. Always returns `false` if `self` or `ancestor` are
+  # unknown to the type registry.
+  #
+  # @param ancestor [MimeType,#to_s] the candidate ancestor type
+  #
+  # @return [true, false] whether `self` is a descendant of `ancestor`
+  #
+  def descendant_of? ancestor
+    # always false if we don't know what this is
+    return unless c = canonical
+
+    # ancestor canonical could be nil which will be false
+    c.lineage.include? self.class[ancestor].canonical
+  end
+
+  # Return the canonical type. Returns `nil` if the type is unknown to
+  # the registry.
   #
   # @return [MimeMagic, nil] the canonical type, if present.
   #
   def canonical
-    self.class.canonical type
+    t = TYPES[type.downcase] or return
+    return self if type == t[3]
+    self.class.new t[3]
   end
 
   # Return the canonical type.
@@ -236,8 +261,7 @@ class MimeMagic
   # @return [MimeMagic, nil] the canonical type, if present.
   #
   def self.canonical type
-    t = TYPES[type.to_s.downcase] or return
-    new t[3]
+    self[type].canonical
   end
 
   # Determine if the type is an alias.
@@ -253,7 +277,9 @@ class MimeMagic
   # @return [Array<MimeMagic>] the aliases, if any.
   #
   def aliases
-    self.class.aliases type
+    TYPES.fetch(type.downcase, [nil, nil, nil, nil, []])[4].map do |t|
+      self.class.new t
+    end
   end
 
   # Return the type's aliases.
@@ -263,9 +289,7 @@ class MimeMagic
   # @return [Array<MimeMagic>] the aliases, if any.
   #
   def self.aliases type
-    TYPES.fetch(type.to_s.downcase, [nil, nil, nil, nil, []])[4].map do |t|
-      new t
-    end
+    self[type].aliases
   end
 
   # Fetches the immediate parent types.
