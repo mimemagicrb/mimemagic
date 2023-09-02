@@ -88,19 +88,6 @@ class MimeMagic
   # Determine if the type is video.
   def video?; mediatype == 'video'; end
 
-  # Returns true if type is child of parent type
-  #
-  # @param parent [#to_s] a candidate parent type
-  # @param recurse [true, false] whether to recurse
-  #
-  # @return [true, false] whether `self` is a child of `parent`
-  #
-  def child_of?(parent, recurse: true)
-    return descendant_of? parent if recurse
-    return unless c = canonical
-    c.parents.include? self.class[parent].canonical
-  end
-
   # Get string list of file extensions.
   #
   # @return [Array<String>] associated file extensions.
@@ -115,6 +102,139 @@ class MimeMagic
   #
   def comment
     TYPES.fetch(type, [nil, nil, nil])[2].to_s.dup
+  end
+
+  # Return the canonical type. Returns `nil` if the type is unknown to
+  # the registry.
+  #
+  # @return [MimeMagic, nil] the canonical type, if present.
+  #
+  def canonical
+    t = TYPES[type.downcase] or return
+    return self if type == t[3]
+    self.class.new t[3]
+  end
+
+  # Return the type's aliases.
+  #
+  # @return [Array<MimeMagic>] the aliases, if any.
+  #
+  def aliases
+    TYPES.fetch(type.downcase, [nil, nil, nil, nil, []])[4].map do |t|
+      self.class.new t
+    end
+  end
+
+  # Determine if the type is an alias.
+  #
+  # @return [false, true] whether the type is an alias.
+  #
+  def alias?
+    type != canonical.type
+  end
+
+  # Returns true if the ancestor type is anywhere in the subject
+  # type's lineage. Always returns `false` if either `self` or
+  # `ancestor` are unknown to the type registry.
+  #
+  # @param ancestor [MimeType,#to_s] the candidate ancestor type
+  #
+  # @return [true, false] whether `self` is a descendant of `ancestor`
+  #
+  def descendant_of? ancestor
+    # always false if we don't know what this is
+    return unless c = canonical
+
+    # ancestor canonical could be nil which will be false
+    c.lineage.include? self.class[ancestor].canonical
+  end
+
+  # Returns true if type is child of parent type. Behaves the same as
+  # #descendant_of? if `recurse` is true, which is the default.
+  #
+  # @param parent [#to_s] a candidate parent type
+  # @param recurse [true, false] whether to recurse
+  #
+  # @return [true, false] whether `self` is a child of `parent`
+  #
+  def child_of?(parent, recurse: true)
+    return descendant_of? parent if recurse
+    return unless c = canonical
+    c.parents.include? self.class[parent].canonical
+  end
+
+  # Fetches the immediate parent types.
+  #
+  # @return [Array<MimeMagic>] the type's parents
+  #
+  def parents
+    out = TYPES.fetch(type.to_s.downcase, [nil, []])[1].map do |x|
+      self.class.new x
+    end
+    # add this unless we're it
+    out << self.class.new('application/octet-stream') if
+      out.empty? and type.downcase != 'application/octet-stream'
+
+    out.uniq
+  end
+
+  # Fetches the entire inheritance hierarchy for the given MIME type.
+  #
+  # @return [Array<MimeMagic>] the type's lineage
+  #
+  def lineage
+    ([canonical || self] + parents.map { |t| t.lineage }.flatten).uniq
+  end
+
+  alias_method :ancestor_types, :lineage
+
+  # Determine if the _type_ is a descendant of `text/plain`. Not to be
+  # confused with the class method {.binary?}, which concerns
+  # arbitrary input.
+  #
+  # @return [true, false, nil] whether the type is binary.
+  #
+  def binary?
+    not lineage.include? 'text/plain'
+  end
+
+  # Compare the equality of the type with another (or plain string).
+  #
+  # @param other [#to_s] the other to test
+  #
+  # @return [false, true] whether the two are equal.
+  #
+  def eql?(other)
+    type == self.class[other].canonical.type
+  end
+
+  alias_method :==, :eql?
+
+  # Return the object's (the underlying type string) hash.
+  #
+  # @return [Integer] the hash value.
+  #
+  def hash
+    type.hash
+  end
+
+  # Return the type as a string.
+  #
+  # @return [String] the type, as a string.
+  #
+  def to_s
+    type
+  end
+
+  # Return a diagnostic representation of the object.
+  #
+  # @return [String] a string representing the object.
+  #
+  def inspect
+    out = @type
+    out = [out, @params.map { |x| x.join ?= }].join ?; if
+      @params and !@params.empty?
+    %q[<%s "%s">] % [self.class, out]
   end
 
   # Look up MIME type by file extension. When `default` is true or a
@@ -177,45 +297,6 @@ class MimeMagic
     out
   end
 
-  # Return a diagnostic representation of the object.
-  #
-  # @return [String] a string representing the object.
-  #
-  def inspect
-    out = @type
-    out = [out, @params.map { |x| x.join ?= }].join ?; if
-      @params and !@params.empty?
-    %q[<%s "%s">] % [self.class, out]
-  end
-
-  # Return the type as a string.
-  #
-  # @return [String] the type, as a string.
-  #
-  def to_s
-    type
-  end
-
-  # Compare the equality of the type with another (or plain string).
-  #
-  # @param other [#to_s] the other to teset
-  #
-  # @return [false, true] whether the two are equal.
-  #
-  def eql?(other)
-    type == other.to_s
-  end
-
-  alias_method :==, :eql?
-
-  # Return the object's (the underlying type string) hash.
-  #
-  # @return [Integer] the hash value.
-  #
-  def hash
-    type.hash
-  end
-
   # Returns true if type is child of parent type.
   #
   # @param child [#to_s] a candidate child type
@@ -223,35 +304,8 @@ class MimeMagic
   #
   # @return [true, false] whether `self` is a child of `parent`
   #
-  def self.child?(child, parent)
-    self[child].parents.include? self[parent].canonical
-  end
-
-  # Returns true if the ancestor type is anywhere in the subject
-  # type's lineage. Always returns `false` if `self` or `ancestor` are
-  # unknown to the type registry.
-  #
-  # @param ancestor [MimeType,#to_s] the candidate ancestor type
-  #
-  # @return [true, false] whether `self` is a descendant of `ancestor`
-  #
-  def descendant_of? ancestor
-    # always false if we don't know what this is
-    return unless c = canonical
-
-    # ancestor canonical could be nil which will be false
-    c.lineage.include? self.class[ancestor].canonical
-  end
-
-  # Return the canonical type. Returns `nil` if the type is unknown to
-  # the registry.
-  #
-  # @return [MimeMagic, nil] the canonical type, if present.
-  #
-  def canonical
-    t = TYPES[type.downcase] or return
-    return self if type == t[3]
-    self.class.new t[3]
+  def self.child?(child, parent, recurse: true)
+    self[child].child_of? parent, recurse: recurse
   end
 
   # Return the canonical type.
@@ -264,24 +318,6 @@ class MimeMagic
     self[type].canonical
   end
 
-  # Determine if the type is an alias.
-  #
-  # @return [false, true] whether the type is an alias.
-  #
-  def alias?
-    type != canonical.type
-  end
-
-  # Return the type's aliases.
-  #
-  # @return [Array<MimeMagic>] the aliases, if any.
-  #
-  def aliases
-    TYPES.fetch(type.downcase, [nil, nil, nil, nil, []])[4].map do |t|
-      self.class.new t
-    end
-  end
-
   # Return the type's aliases.
   #
   # @param type [#to_s] the type to check
@@ -292,41 +328,8 @@ class MimeMagic
     self[type].aliases
   end
 
-  # Fetches the immediate parent types.
-  #
-  # @return [Array<MimeMagic>] the type's parents
-  #
-  def parents
-    out = TYPES.fetch(type.to_s.downcase, [nil, []])[1].map do |x|
-      self.class.new x
-    end
-    # add this unless we're it
-    out << self.class.new('application/octet-stream') if
-      out.empty? and type.downcase != 'application/octet-stream'
-
-    out.uniq
-  end
-
-  # Fetches the entire inheritance hierarchy for the given MIME type.
-  #
-  # @return [Array<MimeMagic>] the type's lineage
-  #
-  def lineage
-    ([self] + parents.map { |t| t.lineage }.flatten).uniq
-  end
-
-  alias_method :ancestor_types, :lineage
-
-  # Determine if the type is binary.
-  #
-  # @return [true, false, nil] whether the input is binary (`nil` if
-  #  indeterminate).
-  #
-  def binary?
-    not lineage.include? 'text/plain'
-  end
-
-  # Determine if an input is binary.
+  # Determine if an _input_ is binary. Not to be confused with the
+  # instance method {#binary?}, which concerns the _type_.
   #
   # @param thing [#read, #to_s] the IO-like or String-like thing to
   #  test; can also be a file name/path/extension or MIME type.
@@ -365,7 +368,7 @@ class MimeMagic
     # consider this to be 'binary' if empty
     return true if sample.empty?
     # control codes minus ordinary whitespace
-    /[\x0-\x8\xe-\x1f\x7f]/.match? sample.b
+    /[\x0-\x8\xe-\x1f\x7f]/n.match? sample.b
   end
 
   # Return either `application/octet-stream` or `text/plain` depending
