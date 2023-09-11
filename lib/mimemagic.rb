@@ -205,7 +205,18 @@ class MimeMagic
   # @return [false, true] whether the two are equal.
   #
   def eql?(other)
-    type == self.class[other].canonical.type
+    # coerce the rhs
+    other = self.class[other]
+
+    # check for an exact match
+    ok = type.downcase == other.type.downcase
+    return ok if ok
+
+    # now canonicalize both sides and check
+    lhs = canonical
+    rhs = other.canonical
+
+    lhs && rhs && lhs.type == rhs.type
   end
 
   alias_method :==, :eql?

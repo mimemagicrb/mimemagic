@@ -25,8 +25,12 @@ class TestMimeMagic < Minitest::Test
     assert_equal 'text/html', MimeMagic.new('text/html').type
     assert_equal 'text', MimeMagic.new('text/html').mediatype
     assert_equal 'html', MimeMagic.new('text/html').subtype
+
     # a little more robust equality test perchance
     assert MimeMagic['TEXT/HTML'] == 'TeXT/HtML;charset=utf-8'
+
+    # this was crashing because the RHS has no canonical
+    assert MimeMagic['text/html'] != 'application/x-bogus'
   end
 
   def test_have_mediatype_helpers
