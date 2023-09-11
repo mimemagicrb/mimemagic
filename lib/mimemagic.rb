@@ -11,12 +11,16 @@ MimeMagic.parse_database
 class MimeMagic
   attr_reader :type, :mediatype, :subtype, :params
 
-  # Initialize a new MIME type by string
+  # Initialize a new MIME type by its string representation.
+  #
+  # @param type [#to_s] the type to parse.
+  #
   def initialize(type)
-    # chop off params
-    @type, *params = type.to_s.strip.split(/(?:\s*;\s*)+/)
+    @type, *params = type.to_s.strip.split(/(?:\s*;\s*)+/) # chop off params
+    @type.downcase! # normalize the case
+    # split parameter-value pairs if present
     @params = params.map { |x| x.split(/\s*=\s*/, 2) } unless params.empty?
-    @mediatype, @subtype = @type.split ?/, 2
+    @mediatype, @subtype = @type.split ?/, 2 # split major and minor
   end
 
   # Syntactic sugar alias for constructor. No-op if `type` is already
@@ -32,8 +36,10 @@ class MimeMagic
     return type if type.is_a? self
 
     # now we handle the string
-    type = type.to_s.downcase.strip
-    return by_extension type unless type.to_s.include? ?/
+    type = type.to_s.strip
+    return by_extension type unless type.include? ?/
+
+    # otherwise pass to constructor
     new type
   end
 
@@ -209,8 +215,7 @@ class MimeMagic
     other = self.class[other]
 
     # check for an exact match
-    ok = type.downcase == other.type.downcase
-    return ok if ok
+    return true if type == other.type
 
     # now canonicalize both sides and check
     lhs = canonical
