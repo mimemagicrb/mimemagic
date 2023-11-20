@@ -362,7 +362,7 @@ class MimeMagic
     elsif %i[seek tell read].all? { |m| thing.respond_to? m }
       pos = thing.tell
       thing.seek 0, 0
-      sample = thing.read 256
+      sample = thing.read(256).to_s # handle empty
       thing.seek pos
     elsif thing.respond_to? :to_s
       str = thing.to_s
