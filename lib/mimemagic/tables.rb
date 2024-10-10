@@ -128,8 +128,8 @@ class MimeMagic
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document", # .docx
       "application/vnd.ms-powerpoint",                                           # .pps
       "application/vnd.openxmlformats-officedocument.presentationml.slideshow",  # .ppsx
-      "application/vnd.ms-excel",                                                # .pps
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",       # .ppsx
+      "application/vnd.ms-excel",                                                # .xls
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",       # .xlsx
     ]
 
     common_magics = common_types.map do |common_type|
