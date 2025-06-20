@@ -4,6 +4,7 @@ require "rake/clean"
 def locate_mime_database
   possible_paths = [
     (File.expand_path(ENV["FREEDESKTOP_MIME_TYPES_PATH"]) if ENV["FREEDESKTOP_MIME_TYPES_PATH"]),
+    *ENV.fetch("XDG_DATA_DIRS", "").split(":").map { |dir| File.join(dir, "mime/packages/freedesktop.org.xml") },
     "/usr/local/share/mime/packages/freedesktop.org.xml",
     "/opt/homebrew/share/mime/packages/freedesktop.org.xml",
     "/opt/local/share/mime/packages/freedesktop.org.xml",
