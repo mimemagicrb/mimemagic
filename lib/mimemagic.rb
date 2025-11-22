@@ -24,12 +24,14 @@ class MimeMagic
   end
 
   # Syntactic sugar alias for constructor. No-op if `type` is already
-  # a {MimeMagic} object.
+  # a {MimeMagic} object. The argument is treated as a file extension
+  # if it doesn't contain a `/`, and may return `nil` if it doesn't
+  # resolve.
   #
   # @param type [#to_s] a string-like object representing a MIME type
   #  or file extension.
   #
-  # @return [MimeMagic] the instantiated object.
+  # @return [MimeMagic, nil] the instantiated object.
   #
   def self.[] type
     # try noop first
@@ -37,6 +39,10 @@ class MimeMagic
 
     # now we handle the string
     type = type.to_s.strip
+    # empty string should be default
+    return default_type if type.empty?
+
+    # this may return null
     return by_extension type unless type.include? ?/
 
     # otherwise pass to constructor
@@ -212,7 +218,7 @@ class MimeMagic
   #
   def eql?(other)
     # coerce the rhs
-    other = self.class[other]
+    other = self.class[other] || self.class.default_type
 
     # check for an exact match
     return true if type == other.type
@@ -394,7 +400,8 @@ class MimeMagic
   #
   # @return [MimeMagic] the default type
   #
-  def self.default_type thing
+  def self.default_type thing = nil
+    return new 'application/octet-stream' unless thing
     new(binary?(thing) ? 'application/octet-stream' : 'text/plain')
   end
 
